@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <!-- Money / Deals tag / pouch -->
+  <path d="M24 6 C20 6 18 10 17 14 L11 16 C9 17 8 19 8 21 L10 40 C10 42 12 44 15 44 L33 44 C36 44 38 42 38 40 L40 21 C40 19 39 17 37 16 L31 14 C30 10 28 6 24 6 Z" fill="#F59E0B"/>
+  <ellipse cx="24" cy="14" rx="8" ry="3" fill="#D97706"/>
+  <!-- Rupee / Dollar symbol -->
+  <circle cx="24" cy="29" r="8" fill="#FDE68A"/>
+  <text x="24" y="34" font-size="12" font-family="Arial, sans-serif" font-weight="bold" fill="#B45309" text-anchor="middle">₹</text>
+</svg>
