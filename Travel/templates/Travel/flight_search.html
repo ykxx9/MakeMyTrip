@@ -1,0 +1,211 @@
+
+{% extends 'travel/base.html' %}
+{% load static %}
+
+{% block title %}Search Flights | MakeMyTrip{% endblock %}
+
+{% block content %}
+
+<style>
+.flight-search-page {
+    background: #f2f4f7;
+    min-height: 75vh;
+    padding: 55px 20px;
+    font-family: Arial, sans-serif;
+}
+
+.flight-search-box {
+    max-width: 1100px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.08);
+}
+
+.flight-search-box h1 {
+    font-size: 27px;
+    margin-bottom: 25px;
+}
+
+.trip-options {
+    display: flex;
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+.trip-options label {
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.trip-options input {
+    accent-color: #008cff;
+}
+
+.search-fields {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.search-field {
+    border: 1px solid #ddd;
+    padding: 14px;
+    border-radius: 8px;
+}
+
+.search-field label {
+    display: block;
+    color: #777;
+    font-size: 12px;
+    margin-bottom: 9px;
+}
+
+.search-field input,
+.search-field select {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    background: white;
+}
+
+.return-field {
+    display: none;
+}
+
+.search-submit {
+    display: block;
+    margin: 30px auto -55px;
+    background: linear-gradient(90deg,#53b2fe,#065af3);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 15px 65px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.search-submit:hover {
+    opacity: .9;
+}
+
+@media(max-width:750px) {
+    .search-fields {
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+@media(max-width:450px) {
+    .search-fields {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<div class="flight-search-page">
+
+    <div class="flight-search-box">
+
+        <h1>Book Your Flights</h1>
+
+        <form action="{% url 'flight_results' %}" method="GET">
+
+            <div class="trip-options">
+
+                <label>
+                    <input type="radio"
+                           name="trip_type"
+                           value="one_way"
+                           checked
+                           onclick="toggleReturn(false)">
+                    One Way
+                </label>
+
+                <label>
+                    <input type="radio"
+                           name="trip_type"
+                           value="round_trip"
+                           onclick="toggleReturn(true)">
+                    Round Trip
+                </label>
+
+            </div>
+
+            <div class="search-fields">
+
+                <div class="search-field">
+                    <label>FROM</label>
+                    <input type="text"
+                           name="from"
+                           placeholder="Enter departure city"
+                           required>
+                </div>
+
+                <div class="search-field">
+                    <label>TO</label>
+                    <input type="text"
+                           name="to"
+                           placeholder="Enter destination city"
+                           required>
+                </div>
+
+                <div class="search-field">
+                    <label>DEPARTURE</label>
+                    <input type="date"
+                           name="departure"
+                           required>
+                </div>
+
+                <div class="search-field return-field"
+                     id="returnField">
+
+                    <label>RETURN</label>
+
+                    <input type="date"
+                           name="return_date"
+                           id="returnDate">
+
+                </div>
+
+                <div class="search-field">
+                    <label>TRAVELLERS</label>
+
+                    <select name="travellers">
+                        <option value="1">1 Traveller</option>
+                        <option value="2">2 Travellers</option>
+                        <option value="3">3 Travellers</option>
+                        <option value="4">4 Travellers</option>
+                        <option value="5">5 Travellers</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <button type="submit" class="search-submit">
+                SEARCH FLIGHTS
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+function toggleReturn(show) {
+    const field = document.getElementById("returnField");
+    const input = document.getElementById("returnDate");
+
+    field.style.display = show ? "block" : "none";
+    input.required = show;
+
+    if (!show) {
+        input.value = "";
+    }
+}
+</script>
+
+{% endblock %}

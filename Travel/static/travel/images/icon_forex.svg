@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <!-- Left coin (Rupee) -->
+  <circle cx="17" cy="30" r="13" fill="#E65100"/>
+  <circle cx="17" cy="30" r="10" fill="#FF8F00"/>
+  <text x="17" y="35" text-anchor="middle" font-size="13" fill="white" font-family="Arial" font-weight="bold">₹</text>
+  <!-- Right coin (Dollar) -->
+  <circle cx="33" cy="20" r="13" fill="#1B5E20"/>
+  <circle cx="33" cy="20" r="10" fill="#2E7D32"/>
+  <text x="33" y="25" text-anchor="middle" font-size="13" fill="white" font-family="Arial" font-weight="bold">$</text>
+  <!-- Exchange arrows -->
+  <path d="M22 14 L28 14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <polygon points="27,11 31,14 27,17" fill="white"/>
+  <path d="M28 36 L22 36" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <polygon points="23,33 19,36 23,39" fill="white"/>
+</svg>

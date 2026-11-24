@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <!-- Passport book cover -->
+  <rect x="8" y="4" width="28" height="40" rx="3" fill="#1565C0"/>
+  <!-- Spine -->
+  <rect x="8" y="4" width="6" height="40" rx="2" fill="#0D47A1"/>
+  <!-- Inner page -->
+  <rect x="12" y="8" width="20" height="32" rx="1" fill="#E3F2FD"/>
+  <!-- Emblem -->
+  <circle cx="22" cy="22" r="7" fill="none" stroke="#1565C0" stroke-width="1.5"/>
+  <circle cx="22" cy="22" r="3.5" fill="#BBDEFB"/>
+  <!-- Name lines -->
+  <rect x="14" y="33" width="16" height="2" rx="1" fill="#90CAF9"/>
+  <rect x="14" y="37" width="10" height="2" rx="1" fill="#90CAF9"/>
+  <!-- Stamp -->
+  <circle cx="38" cy="14" r="10" fill="#C62828"/>
+  <circle cx="38" cy="14" r="8.5" fill="none" stroke="white" stroke-width="1" stroke-dasharray="2.5,2"/>
+  <text x="38" y="17.5" text-anchor="middle" font-size="5.5" fill="white" font-family="Arial" font-weight="bold">VISA</text>
+</svg>

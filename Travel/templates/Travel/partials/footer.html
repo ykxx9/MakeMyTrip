@@ -1,0 +1,61 @@
+{% load static %}
+<footer class="site-footer">
+
+    <div class="footer-container">
+
+        <!-- BRAND -->
+        <div class="footer-column">
+            <img
+    src="{% static 'travel/images/makemytrip-logo.png' %}"
+    alt="MakeMyTrip"
+    class="footer-mmt-logo"
+>
+
+            <p>
+    MakeMyTrip – Explore destinations, discover
+    amazing travel deals and plan memorable journeys.
+</p>
+        </div>
+
+
+        <!-- COMPANY -->
+        <div class="footer-column">
+            <h3>Company</h3>
+
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'offers' %}">Offers</a>
+            <a href="{% url 'my_trips' %}">My Trips</a>
+        </div>
+
+
+        <!-- SERVICES -->
+        <div class="footer-column">
+            <h3>Our Services</h3>
+
+            <a href="{% url 'flights' %}">Flights</a>
+            <a href="{% url 'hotels' %}">Hotels</a>
+            <a href="{% url 'holidays' %}">Holiday Packages</a>
+            <a href="{% url 'cabs' %}">Cabs</a>
+        </div>
+
+
+        <!-- SUPPORT -->
+        <div class="footer-column">
+            <h3>Support</h3>
+
+            <a href="#">Help Centre</a>
+            <a href="#">Contact Us</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+        <p>
+            © 2026 MakeMyTrip. All Rights Reserved.
+        </p>
+    </div>
+
+</footer>

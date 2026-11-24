@@ -1,0 +1,361 @@
+
+{% extends 'travel/base.html' %}
+{% load static %}
+
+{% block title %}
+MakeMyTrip | Flights, Hotels & Holidays
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet"
+      href="{% static 'travel/css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{% with bg="travel/images/flight-bg.jpg" %}
+<section class="hero-section" style="background-image: linear-gradient(rgba(225,238,255,0.65), rgba(225,238,255,0.65)), url('{% static bg %}');">
+    <h1>
+        Book Flights, Hotels &amp; Holiday Packages
+    </h1>
+
+    <p>
+        Your journey begins with MakeMyTrip.
+        Discover, compare and plan your next trip.
+    </p>
+
+    <!-- BOOKING WIDGET -->
+    <div class="booking-card">
+
+        <div class="booking-tabs">
+            <button class="booking-tab active">Flights</button>
+            <button class="booking-tab"
+                    onclick="window.location.href='{% url 'hotels' %}'">
+                Hotels
+            </button>
+            <button class="booking-tab"
+                    onclick="window.location.href='{% url 'holidays' %}'">
+                Holidays
+            </button>
+        </div>
+
+        <form action="{% url 'flight_results' %}" method="GET">
+
+            
+<div class="trip-options">
+
+    <label>
+        <input
+            type="radio"
+            name="trip_type"
+            value="one_way"
+            checked
+        >
+        One Way
+    </label>
+
+    <label>
+        <input
+            type="radio"
+            name="trip_type"
+            value="round_trip"
+        >
+        Round Trip
+    </label>
+
+</div>
+
+
+           
+<div class="booking-fields">
+
+    <!-- FROM -->
+    <div class="form-group">
+        <label>FROM</label>
+        <input
+            type="text"
+            name="from"
+            placeholder="Enter city"
+            required
+        >
+    </div>
+
+    <!-- TO -->
+    <div class="form-group">
+        <label>TO</label>
+        <input
+            type="text"
+            name="to"
+            placeholder="Enter destination"
+            required
+        >
+    </div>
+
+    <!-- DEPARTURE DATE -->
+    <div class="form-group">
+        <label>DEPARTURE</label>
+        <input
+            type="date"
+            name="departure"
+            id="departure-date"
+            required
+        >
+    </div>
+
+    <!-- RETURN DATE -->
+    <div class="form-group"
+         id="return-date-group"
+         hidden>
+
+        <label>RETURN</label>
+
+        <input
+            type="date"
+            name="return_date"
+            id="return-date"
+            disabled
+        >
+
+    </div>
+
+    <!-- TRAVELLERS -->
+    <div class="form-group">
+        <label>TRAVELLERS</label>
+
+        <select name="travellers">
+            <option value="1">1 Adult</option>
+            <option value="2">2 Adults</option>
+            <option value="3">3 Adults</option>
+            <option value="4">4 Adults</option>
+        </select>
+    </div>
+
+</div>
+
+
+            <button type="submit" class="search-btn">
+                SEARCH FLIGHTS
+            </button>
+
+        </form>
+
+    </div>
+
+</section><!-- end hero-section -->
+{% endwith %}
+
+
+<!-- EXCLUSIVE OFFERS SECTION -->
+
+<section class="offers-section">
+
+    <div class="section-heading">
+        <div>
+            <h2>Exclusive Offers</h2>
+            <p>Grab the best deals for your next journey.</p>
+        </div>
+
+        <a href="{% url 'offers' %}" class="view-all">
+            View All →
+        </a>
+    </div>
+
+
+    <div class="offers-container">
+
+        <!-- FLIGHT OFFER -->
+        <div class="offer-card flight-offer">
+
+            <div class="offer-icon">
+                <img src="{% static 'travel/images/icon_flights.svg' %}" alt="Flight Offers" width="40" height="40">
+            </div>
+
+            <span class="offer-tag">SPECIAL DEAL</span>
+
+            <h3>Flight Offers</h3>
+
+            <p>
+                Save more on your next flight.
+                Explore exciting travel deals.
+            </p>
+
+            <a href="{% url 'flights' %}">
+                Book Flights →
+            </a>
+
+        </div>
+
+
+        <!-- HOTEL OFFER -->
+        <div class="offer-card hotel-offer">
+
+            <div class="offer-icon">
+                <img src="{% static 'travel/images/icon_hotels.svg' %}" alt="Hotel Offers" width="40" height="40">
+            </div>
+
+            <span class="offer-tag">HOTEL DEALS</span>
+
+            <h3>Hotel Offers</h3>
+
+            <p>
+                Find comfortable stays at
+                amazing prices.
+            </p>
+
+            <a href="{% url 'hotels' %}">
+                Book Hotels →
+            </a>
+
+        </div>
+
+
+        <!-- HOLIDAY OFFER -->
+        <div class="offer-card holiday-offer">
+
+            <div class="offer-icon">
+                <img src="{% static 'travel/images/icon_holidays.svg' %}" alt="Holiday Packages" width="40" height="40">
+            </div>
+
+            <span class="offer-tag">HOLIDAY SPECIAL</span>
+
+            <h3>Holiday Packages</h3>
+
+            <p>
+                Discover beautiful destinations
+                and unforgettable experiences.
+            </p>
+
+            <a href="{% url 'holidays' %}">
+                Explore Holidays →
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- POPULAR DESTINATIONS SECTION -->
+
+<section class="destinations-section">
+
+    <div class="section-heading">
+
+        <div>
+            <h2>Popular Destinations</h2>
+            <p>Explore the most loved holiday destinations.</p>
+        </div>
+
+        <a href="{% url 'holidays' %}" class="view-all">
+            Explore All →
+        </a>
+
+    </div>
+
+
+    <div class="destinations-grid">
+
+        <!-- GOA -->
+        <a href="{% url 'holidays' %}" class="destination-card">
+
+            <img src="{% static 'travel/images/goa.jpg' %}"
+                 alt="Goa Beach">
+
+            <div class="destination-overlay">
+                <h3>Goa</h3>
+                <p>Beaches & Nightlife</p>
+            </div>
+
+        </a>
+
+
+        <!-- KASHMIR -->
+        <a href="{% url 'holidays' %}" class="destination-card">
+
+            <img src="{% static 'travel/images/kashmir.jpg' %}"
+                 alt="Kashmir">
+
+            <div class="destination-overlay">
+                <h3>Kashmir</h3>
+                <p>Paradise on Earth</p>
+            </div>
+
+        </a>
+
+
+        <!-- MANALI -->
+        <a href="{% url 'holidays' %}" class="destination-card">
+
+            <img src="{% static 'travel/images/manali.jpg' %}"
+                 alt="Manali Mountains">
+
+            <div class="destination-overlay">
+                <h3>Manali</h3>
+                <p>Mountains & Adventure</p>
+            </div>
+
+        </a>
+
+
+        <!-- KERALA -->
+        <a href="{% url 'holidays' %}" class="destination-card">
+
+            <img src="{% static 'travel/images/kerala.jpg' %}"
+                 alt="Kerala Backwaters">
+
+            <div class="destination-overlay">
+                <h3>Kerala</h3>
+                <p>Nature & Backwaters</p>
+            </div>
+
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- WHY CHOOSE MAKEMYTRIP -->
+
+<section class="why-section">
+
+    <div class="section-heading">
+        <div>
+            <h2>Why Choose MakeMyTrip?</h2>
+            <p>Making every journey simple and memorable.</p>
+        </div>
+    </div>
+
+    <div class="why-grid">
+
+        <div class="why-card">
+            <img src="{% static 'travel/images/icon_booking.svg' %}" alt="Easy Booking" class="why-card-icon" width="44" height="44">
+            <h3>Easy Booking</h3>
+            <p>Book your travel in just a few clicks.</p>
+        </div>
+
+        <div class="why-card">
+            <img src="{% static 'travel/images/icon_deals.svg' %}" alt="Best Deals" class="why-card-icon" width="44" height="44">
+            <h3>Best Deals</h3>
+            <p>Explore exciting offers and great prices.</p>
+        </div>
+
+        <div class="why-card">
+            <img src="{% static 'travel/images/icon_secure.svg' %}" alt="Secure Payments" class="why-card-icon" width="44" height="44">
+            <h3>Secure Payments</h3>
+            <p>Enjoy a safe and reliable booking experience.</p>
+        </div>
+
+        <div class="why-card">
+            <img src="{% static 'travel/images/icon_support.svg' %}" alt="Travel Support" class="why-card-icon" width="44" height="44">
+            <h3>Travel Support</h3>
+            <p>We're here to help throughout your journey.</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+{% endblock %}

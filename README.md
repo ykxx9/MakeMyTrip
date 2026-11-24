@@ -1,2 +1,0 @@
-# MakeMyTrip
-WebDev Assignment

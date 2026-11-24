@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <!-- Padlock shackle -->
+  <path d="M16 20 L16 14 C16 9.6 19.6 6 24 6 C28.4 6 32 9.6 32 14 L32 20" stroke="#059669" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <!-- Lock body -->
+  <rect x="11" y="19" width="26" height="23" rx="5" fill="#10B981"/>
+  <!-- Keyhole -->
+  <circle cx="24" cy="29" r="3" fill="#FFFFFF"/>
+  <path d="M22.5 30 L25.5 30 L25 36 L23 36 Z" fill="#FFFFFF"/>
+</svg>

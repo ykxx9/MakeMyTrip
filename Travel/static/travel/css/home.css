@@ -1,0 +1,509 @@
+
+/* MAIN HERO SECTION */
+.hero-section {
+    min-height: 520px;
+    padding: 55px 20px 70px;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* HERO HEADING */
+.hero-section h1 {
+    text-align: center;
+    font-size: 34px;
+    color: #172b4d;
+    margin: 0 0 10px;
+}
+
+/* SUBTITLE */
+.hero-section p {
+    text-align: center;
+    color: #526783;
+    font-size: 16px;
+    margin-bottom: 35px;
+}
+
+/* SEARCH BOX */
+.search-box {
+    width: 100%;
+    max-width: 1050px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 14px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.10);
+    text-align: left;
+    box-sizing: border-box;
+}
+
+/* SEARCH BUTTON */
+.search-box button {
+    display: block;
+    margin: 25px auto 0;
+}
+
+/* RESPONSIVE */
+@media(max-width: 768px) {
+    .hero-section {
+        padding: 35px 15px;
+    }
+
+    .hero-section h1 {
+        font-size: 25px;
+    }
+
+    .search-box {
+        padding: 20px;
+    }
+}
+
+
+/* BOOKING CARD */
+
+.booking-card {
+    max-width: 1050px;
+    margin: 45px auto 0;
+    padding: 30px;
+
+    background: #ffffff;
+    border-radius: 15px;
+
+    box-shadow: 0 8px 30px rgba(0,0,0,0.09);
+}
+
+
+/* TABS */
+
+.booking-tabs {
+    display: flex;
+    gap: 25px;
+    justify-content: flex-start;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+.booking-tab {
+    background: none;
+    border: none;
+    padding: 8px 12px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #555;
+}
+
+.booking-tab.active {
+    color: #0879e8;
+    font-weight: bold;
+    border-bottom: 3px solid #0879e8;
+}
+
+
+/* TRIP OPTIONS */
+
+.trip-options {
+    display: flex;
+    gap: 25px;
+    margin: 25px 0;
+    text-align: left;
+}
+
+.trip-options label {
+    font-size: 14px;
+    cursor: pointer;
+}
+
+
+/* INPUT FIELDS */
+
+.booking-fields {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    gap: 10px;
+}
+
+.form-group label {
+    font-size: 12px;
+    color: #68778a;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #d9e0e9;
+    border-radius: 7px;
+    font-size: 14px;
+    background: white;
+}
+
+
+/* SEARCH BUTTON */
+
+.search-btn {
+    margin-top: 30px;
+    padding: 15px 55px;
+
+    background: #0879e8;
+    color: white;
+
+    border: none;
+    border-radius: 30px;
+
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.search-btn:hover {
+    background: #005bb5;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+    .hero-heading h1 {
+        font-size: 27px;
+    }
+
+    .booking-fields {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .booking-card {
+        padding: 20px;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .booking-fields {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-tabs {
+        gap: 10px;
+    }
+
+}
+
+
+/* RETURN DATE VISIBILITY */
+
+#return-date-group[hidden] {
+    display: none !important;
+}
+
+/* Keep booking fields aligned */
+
+.booking-fields {
+    align-items: end;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #0879e8;
+    box-shadow: 0 0 0 2px rgba(8, 121, 232, 0.12);
+}
+
+
+/* ==============================
+   EXCLUSIVE OFFERS
+============================== */
+
+.offers-section {
+    max-width: 1150px;
+    margin: 65px auto;
+    padding: 0 20px;
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.section-heading h2 {
+    font-size: 28px;
+    color: #172b4d;
+}
+
+.section-heading p {
+    color: #68778a;
+    margin-top: 7px;
+}
+
+.view-all {
+    color: #0879e8;
+    font-weight: bold;
+}
+
+
+/* OFFERS GRID */
+
+.offers-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+
+/* OFFER CARD */
+
+.offer-card {
+    padding: 28px;
+    border-radius: 14px;
+    min-height: 240px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.offer-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.10);
+}
+
+.flight-offer {
+    background: linear-gradient(135deg, #dcecff, #edf5ff);
+}
+
+.hotel-offer {
+    background: linear-gradient(135deg, #ffe8d7, #fff4e9);
+}
+
+.holiday-offer {
+    background: linear-gradient(135deg, #dcf5e8, #effaf3);
+}
+
+
+/* OFFER ICON */
+
+.offer-icon {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.offer-icon img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    display: block;
+}
+
+
+/* OFFER TAG */
+
+.offer-tag {
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #0879e8;
+    margin-bottom: 9px;
+}
+
+
+/* OFFER CONTENT */
+
+.offer-card h3 {
+    font-size: 21px;
+    margin-bottom: 10px;
+    color: #172b4d;
+}
+
+.offer-card p {
+    color: #5c6b80;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.offer-card a {
+    color: #0879e8;
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: auto;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+    .offers-container {
+        grid-template-columns: 1fr;
+    }
+
+    .section-heading h2 {
+        font-size: 23px;
+    }
+
+}
+
+
+/* ==============================
+   POPULAR DESTINATIONS
+============================== */
+
+.destinations-section {
+    max-width: 1150px;
+    margin: 70px auto;
+    padding: 0 20px;
+}
+
+.destinations-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.destination-card {
+    position: relative;
+    height: 280px;
+    border-radius: 14px;
+    overflow: hidden;
+    display: block;
+}
+
+.destination-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.destination-card:hover img {
+    transform: scale(1.1);
+}
+
+.destination-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 45px 18px 20px;
+
+    background: linear-gradient(
+        transparent,
+        rgba(0,0,0,0.8)
+    );
+
+    color: white;
+}
+
+.destination-overlay h3 {
+    font-size: 23px;
+    margin-bottom: 5px;
+}
+
+.destination-overlay p {
+    font-size: 13px;
+    color: #eeeeee;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+
+    .destinations-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .destinations-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .destination-card {
+        height: 240px;
+    }
+
+}
+
+
+/* WHY CHOOSE MAKEMYTRIP */
+
+.why-section {
+    max-width: 1150px;
+    margin: 70px auto;
+    padding: 0 20px;
+}
+
+.why-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.why-card {
+    background: white;
+    padding: 25px 18px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.why-card-icon {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 5px;
+}
+
+.why-card span {
+    font-size: 32px;
+}
+
+.why-card h3 {
+    margin: 15px 0 8px;
+    color: #172b4d;
+}
+
+.why-card p {
+    font-size: 13px;
+    color: #68778a;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .why-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .why-grid {
+        grid-template-columns: 1fr;
+    }
+}
