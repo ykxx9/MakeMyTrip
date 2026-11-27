@@ -88,12 +88,12 @@
         <!-- POPULAR DESTINATION PILLS -->
         <div class="popular-tags">
             <span class="tags-label">Popular:</span>
-            <button type="button" class="tag-link" onclick="setCity('Goa')">Goa</button>
-            <button type="button" class="tag-link" onclick="setCity('Mumbai')">Mumbai</button>
-            <button type="button" class="tag-link" onclick="setCity('Delhi')">Delhi</button>
-            <button type="button" class="tag-link" onclick="setCity('Manali')">Manali</button>
-            <button type="button" class="tag-link" onclick="setCity('Jaipur')">Jaipur</button>
-            <button type="button" class="tag-link" onclick="setCity('Kerala')">Kerala</button>
+            <a href="{% url 'hotel_results' %}?city=Goa" class="tag-link">Goa</a>
+            <a href="{% url 'hotel_results' %}?city=Mumbai" class="tag-link">Mumbai</a>
+            <a href="{% url 'hotel_results' %}?city=Delhi" class="tag-link">Delhi</a>
+            <a href="{% url 'hotel_results' %}?city=Manali" class="tag-link">Manali</a>
+            <a href="{% url 'hotel_results' %}?city=Jaipur" class="tag-link">Jaipur</a>
+            <a href="{% url 'hotel_results' %}?city=Kerala" class="tag-link">Kerala</a>
         </div>
 
     </div>
@@ -134,16 +134,4 @@
 
 </section>
 
-{% endblock %}
-
-{% block extra_js %}
-<script>
-function setCity(city) {
-    const input = document.getElementById('hotel-city-input');
-    if (input) {
-        input.value = city;
-        input.focus();
-    }
-}
-</script>
 {% endblock %}

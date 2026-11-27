@@ -28,15 +28,9 @@ MakeMyTrip | Flights, Hotels & Holidays
     <div class="booking-card">
 
         <div class="booking-tabs">
-            <button class="booking-tab active">Flights</button>
-            <button class="booking-tab"
-                    onclick="window.location.href='{% url 'hotels' %}'">
-                Hotels
-            </button>
-            <button class="booking-tab"
-                    onclick="window.location.href='{% url 'holidays' %}'">
-                Holidays
-            </button>
+            <a href="{% url 'flights' %}" class="booking-tab active" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">Flights</a>
+            <a href="{% url 'hotels' %}" class="booking-tab" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">Hotels</a>
+            <a href="{% url 'holidays' %}" class="booking-tab" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">Holidays</a>
         </div>
 
         <form action="{% url 'flight_results' %}" method="GET">

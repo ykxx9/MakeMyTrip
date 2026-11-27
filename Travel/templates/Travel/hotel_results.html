@@ -38,110 +38,129 @@
 
         <div class="results-layout-minimal">
 
-            <!-- FILTER SIDEBAR -->
+            <!-- FILTER SIDEBAR (PURE PYTHON / FORM POWERED) -->
             <aside class="sidebar-minimal">
 
-                <div class="sidebar-header-minimal">
-                    <h3>Filter by</h3>
-                    <button type="button" class="btn-clear-text" id="clearHotelFilters">
-                        Reset
-                    </button>
-                </div>
+                <form method="GET" action="{% url 'hotel_results' %}" id="hotelFilterForm">
 
-                <!-- PRICE RANGE -->
-                <div class="filter-group-minimal">
-                    <h4>Price (per night)</h4>
+                    <!-- PRESERVE SEARCH PARAMETERS -->
+                    <input type="hidden" name="city" value="{{ city }}">
+                    <input type="hidden" name="checkin" value="{{ checkin }}">
+                    <input type="hidden" name="checkout" value="{{ checkout }}">
+                    <input type="hidden" name="rooms" value="{{ rooms }}">
+                    <input type="hidden" name="guests" value="{{ guests }}">
+                    <input type="hidden" name="sort" value="{{ sort_by }}">
 
-                    <label class="check-item">
-                        <input type="checkbox" class="price-filter" value="budget">
-                        <span>Under ₹2,500</span>
-                    </label>
+                    <div class="sidebar-header-minimal">
+                        <h3>Filter by</h3>
+                        <a href="{% url 'hotel_results' %}?city={{ city }}&checkin={{ checkin }}&checkout={{ checkout }}&rooms={{ rooms }}&guests={{ guests }}" class="btn-clear-text" style="text-decoration: none;">
+                            Reset
+                        </a>
+                    </div>
 
-                    <label class="check-item">
-                        <input type="checkbox" class="price-filter" value="mid">
-                        <span>₹2,500 – ₹6,000</span>
-                    </label>
+                    <!-- SUBMIT BUTTON -->
+                    <div style="margin-bottom: 16px;">
+                        <button type="submit" class="minimal-search-btn" style="width: 100%; height: 38px; font-size: 13px;">
+                            Apply Filters
+                        </button>
+                    </div>
 
-                    <label class="check-item">
-                        <input type="checkbox" class="price-filter" value="premium">
-                        <span>₹6,000 – ₹10,000</span>
-                    </label>
+                    <!-- PRICE RANGE -->
+                    <div class="filter-group-minimal">
+                        <h4>Price (per night)</h4>
 
-                    <label class="check-item">
-                        <input type="checkbox" class="price-filter" value="luxury">
-                        <span>₹10,000+</span>
-                    </label>
-                </div>
+                        <label class="check-item">
+                            <input type="checkbox" name="price_category" value="budget" {% if 'budget' in selected_prices %}checked{% endif %}>
+                            <span>Under ₹2,500</span>
+                        </label>
 
-                <!-- STAR RATING -->
-                <div class="filter-group-minimal">
-                    <h4>Star Rating</h4>
+                        <label class="check-item">
+                            <input type="checkbox" name="price_category" value="mid" {% if 'mid' in selected_prices %}checked{% endif %}>
+                            <span>₹2,500 – ₹6,000</span>
+                        </label>
 
-                    <label class="check-item">
-                        <input type="checkbox" class="star-filter" value="5">
-                        <span>5 stars</span>
-                    </label>
+                        <label class="check-item">
+                            <input type="checkbox" name="price_category" value="premium" {% if 'premium' in selected_prices %}checked{% endif %}>
+                            <span>₹6,000 – ₹10,000</span>
+                        </label>
 
-                    <label class="check-item">
-                        <input type="checkbox" class="star-filter" value="4">
-                        <span>4 stars</span>
-                    </label>
+                        <label class="check-item">
+                            <input type="checkbox" name="price_category" value="luxury" {% if 'luxury' in selected_prices %}checked{% endif %}>
+                            <span>₹10,000+</span>
+                        </label>
+                    </div>
 
-                    <label class="check-item">
-                        <input type="checkbox" class="star-filter" value="3">
-                        <span>3 stars</span>
-                    </label>
+                    <!-- STAR RATING -->
+                    <div class="filter-group-minimal">
+                        <h4>Star Rating</h4>
 
-                    <label class="check-item">
-                        <input type="checkbox" class="star-filter" value="2">
-                        <span>2 stars &amp; budget</span>
-                    </label>
-                </div>
+                        <label class="check-item">
+                            <input type="checkbox" name="stars" value="5" {% if '5' in selected_stars %}checked{% endif %}>
+                            <span>5 stars</span>
+                        </label>
 
-                <!-- GUEST RATING -->
-                <div class="filter-group-minimal">
-                    <h4>Review Score</h4>
+                        <label class="check-item">
+                            <input type="checkbox" name="stars" value="4" {% if '4' in selected_stars %}checked{% endif %}>
+                            <span>4 stars</span>
+                        </label>
 
-                    <label class="check-item">
-                        <input type="checkbox" class="rating-filter" value="4.5">
-                        <span>4.5+ (Excellent)</span>
-                    </label>
+                        <label class="check-item">
+                            <input type="checkbox" name="stars" value="3" {% if '3' in selected_stars %}checked{% endif %}>
+                            <span>3 stars</span>
+                        </label>
 
-                    <label class="check-item">
-                        <input type="checkbox" class="rating-filter" value="4.0">
-                        <span>4.0+ (Very Good)</span>
-                    </label>
-                </div>
+                        <label class="check-item">
+                            <input type="checkbox" name="stars" value="2" {% if '2' in selected_stars %}checked{% endif %}>
+                            <span>2 stars &amp; budget</span>
+                        </label>
+                    </div>
 
-                <!-- AMENITIES -->
-                <div class="filter-group-minimal">
-                    <h4>Amenities</h4>
+                    <!-- GUEST RATING -->
+                    <div class="filter-group-minimal">
+                        <h4>Review Score</h4>
 
-                    <label class="check-item">
-                        <input type="checkbox" class="amenity-filter" value="breakfast">
-                        <span>Breakfast included</span>
-                    </label>
+                        <label class="check-item">
+                            <input type="checkbox" name="rating" value="4.5" {% if '4.5' in selected_ratings %}checked{% endif %}>
+                            <span>4.5+ (Excellent)</span>
+                        </label>
 
-                    <label class="check-item">
-                        <input type="checkbox" class="amenity-filter" value="pool">
-                        <span>Swimming pool</span>
-                    </label>
+                        <label class="check-item">
+                            <input type="checkbox" name="rating" value="4.0" {% if '4.0' in selected_ratings %}checked{% endif %}>
+                            <span>4.0+ (Very Good)</span>
+                        </label>
+                    </div>
 
-                    <label class="check-item">
-                        <input type="checkbox" class="amenity-filter" value="wifi">
-                        <span>Free Wi-Fi</span>
-                    </label>
+                    <!-- AMENITIES -->
+                    <div class="filter-group-minimal">
+                        <h4>Amenities</h4>
 
-                    <label class="check-item">
-                        <input type="checkbox" class="amenity-filter" value="couple">
-                        <span>Couple friendly</span>
-                    </label>
+                        <label class="check-item">
+                            <input type="checkbox" name="amenity" value="breakfast" {% if 'breakfast' in selected_amenities %}checked{% endif %}>
+                            <span>Breakfast included</span>
+                        </label>
 
-                    <label class="check-item">
-                        <input type="checkbox" class="amenity-filter" value="cancellation">
-                        <span>Free cancellation</span>
-                    </label>
-                </div>
+                        <label class="check-item">
+                            <input type="checkbox" name="amenity" value="pool" {% if 'pool' in selected_amenities %}checked{% endif %}>
+                            <span>Swimming pool</span>
+                        </label>
+
+                        <label class="check-item">
+                            <input type="checkbox" name="amenity" value="wifi" {% if 'wifi' in selected_amenities %}checked{% endif %}>
+                            <span>Free Wi-Fi</span>
+                        </label>
+
+                        <label class="check-item">
+                            <input type="checkbox" name="amenity" value="couple" {% if 'couple' in selected_amenities %}checked{% endif %}>
+                            <span>Couple friendly</span>
+                        </label>
+
+                        <label class="check-item">
+                            <input type="checkbox" name="amenity" value="cancellation" {% if 'cancellation' in selected_amenities %}checked{% endif %}>
+                            <span>Free cancellation</span>
+                        </label>
+                    </div>
+
+                </form>
 
             </aside>
 
@@ -151,32 +170,37 @@
 
                 <!-- HEADER & SORT -->
                 <div class="results-top-bar">
-                    <span class="count-label" id="hotelResultsCount">
+                    <span class="count-label">
                         {{ hotel_count }} properties found in {{ city }}
                     </span>
 
-                    <div class="sort-box">
+                    <form method="GET" action="{% url 'hotel_results' %}" class="sort-box" style="display: flex; align-items: center; gap: 8px;">
+                        <input type="hidden" name="city" value="{{ city }}">
+                        <input type="hidden" name="checkin" value="{{ checkin }}">
+                        <input type="hidden" name="checkout" value="{{ checkout }}">
+                        <input type="hidden" name="rooms" value="{{ rooms }}">
+                        <input type="hidden" name="guests" value="{{ guests }}">
+                        {% for p in selected_prices %}<input type="hidden" name="price_category" value="{{ p }}">{% endfor %}
+                        {% for s in selected_stars %}<input type="hidden" name="stars" value="{{ s }}">{% endfor %}
+                        {% for r in selected_ratings %}<input type="hidden" name="rating" value="{{ r }}">{% endfor %}
+                        {% for a in selected_amenities %}<input type="hidden" name="amenity" value="{{ a }}">{% endfor %}
+
                         <label for="sortHotels">Sort by:</label>
-                        <select id="sortHotels" class="select-sort">
-                            <option value="recommended">Recommended</option>
-                            <option value="price_low">Price (lowest first)</option>
-                            <option value="price_high">Price (highest first)</option>
-                            <option value="rating_high">Top reviewed</option>
+                        <select id="sortHotels" name="sort" class="select-sort">
+                            <option value="recommended" {% if sort_by == 'recommended' %}selected{% endif %}>Recommended</option>
+                            <option value="price_low" {% if sort_by == 'price_low' %}selected{% endif %}>Price (lowest first)</option>
+                            <option value="price_high" {% if sort_by == 'price_high' %}selected{% endif %}>Price (highest first)</option>
+                            <option value="rating_high" {% if sort_by == 'rating_high' %}selected{% endif %}>Top reviewed</option>
                         </select>
-                    </div>
+                        <button type="submit" class="tag-link" style="padding: 4px 10px; cursor: pointer; border: 1px solid #d0d7de; background: #fff;">Sort</button>
+                    </form>
                 </div>
 
                 <!-- LIST OF CARDS -->
                 <div class="cards-stack" id="hotelCardsList">
 
                     {% for hotel in hotels %}
-                    <article class="hotel-card-minimal"
-                         data-id="{{ hotel.id }}"
-                         data-price="{{ hotel.price }}"
-                         data-stars="{{ hotel.stars }}"
-                         data-rating="{{ hotel.rating }}"
-                         data-cancellation="{{ hotel.free_cancellation|yesno:'true,false' }}"
-                         data-amenities="{% for a in hotel.amenities %}{{ a|lower }} {% endfor %}">
+                    <article class="hotel-card-minimal">
 
                         <!-- THUMBNAIL -->
                         <div class="card-thumb">
@@ -236,16 +260,16 @@
                         </div>
 
                     </article>
-                    {% endfor %}
-
+                    {% empty %}
                     <!-- EMPTY STATE -->
-                    <div class="empty-state-minimal" id="hotelEmptyState" style="display: none;">
+                    <div class="empty-state-minimal" style="display: block;">
                         <h3>No properties found</h3>
                         <p>Try clearing some filters or searching for different dates.</p>
-                        <button type="button" class="btn-reset" id="resetHotelFiltersBtn">
+                        <a href="{% url 'hotel_results' %}?city={{ city }}&checkin={{ checkin }}&checkout={{ checkout }}&rooms={{ rooms }}&guests={{ guests }}" class="btn-reset" style="display: inline-block; text-decoration: none;">
                             Reset Filters
-                        </button>
+                        </a>
                     </div>
+                    {% endfor %}
 
                 </div>
 
@@ -257,204 +281,4 @@
 
 </div>
 
-{% endblock %}
-
-{% block extra_js %}
-<script>
-// ==============================================================================
-// HOTEL FILTER & SORT LOGIC (Clean, easy-to-read beginner friendly code)
-// ==============================================================================
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    // 1. Grab reference to DOM elements
-    const hotelList = document.getElementById("hotelCardsList");
-    const countDisplay = document.getElementById("hotelResultsCount");
-    const emptyState = document.getElementById("hotelEmptyState");
-    const sortSelect = document.getElementById("sortHotels");
-    const clearBtn = document.getElementById("clearHotelFilters");
-    const resetBtn = document.getElementById("resetHotelFiltersBtn");
-
-    const priceCheckboxes = document.querySelectorAll(".price-filter");
-    const starCheckboxes = document.querySelectorAll(".star-filter");
-    const ratingCheckboxes = document.querySelectorAll(".rating-filter");
-    const amenityCheckboxes = document.querySelectorAll(".amenity-filter");
-    const hotelCards = document.querySelectorAll(".hotel-card-minimal");
-
-
-    // 2. Helper function: Get an array of checked values from any checkbox group
-    function getCheckedValues(checkboxes) {
-        const checkedValues = [];
-        checkboxes.forEach(function (checkbox) {
-            if (checkbox.checked) {
-                checkedValues.push(checkbox.value);
-            }
-        });
-        return checkedValues;
-    }
-
-
-    // 3. Helper function: Check if hotel price matches any selected price range
-    function checkPriceMatch(price, selectedRanges) {
-        if (selectedRanges.length === 0) {
-            return true; // No filter selected -> allow all
-        }
-
-        for (let i = 0; i < selectedRanges.length; i++) {
-            const range = selectedRanges[i];
-            if (range === "budget" && price < 2500) return true;
-            if (range === "mid" && price >= 2500 && price <= 6000) return true;
-            if (range === "premium" && price > 6000 && price <= 10000) return true;
-            if (range === "luxury" && price > 10000) return true;
-        }
-        return false;
-    }
-
-
-    // 4. Helper function: Check if hotel stars match any selected star filter
-    function checkStarMatch(hotelStars, selectedStars) {
-        if (selectedStars.length === 0) {
-            return true;
-        }
-        return selectedStars.includes(hotelStars);
-    }
-
-
-    // 5. Helper function: Check if hotel rating meets minimum score
-    function checkRatingMatch(hotelRating, selectedRatings) {
-        if (selectedRatings.length === 0) {
-            return true;
-        }
-        for (let i = 0; i < selectedRatings.length; i++) {
-            const minScore = parseFloat(selectedRatings[i]);
-            if (hotelRating >= minScore) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    // 6. Helper function: Check if hotel contains all selected amenities
-    function checkAmenitiesMatch(amenitiesString, hasFreeCancel, selectedAmenities) {
-        if (selectedAmenities.length === 0) {
-            return true;
-        }
-        for (let i = 0; i < selectedAmenities.length; i++) {
-            const amenity = selectedAmenities[i];
-            if (amenity === "cancellation" && !hasFreeCancel) {
-                return false;
-            }
-            if (amenity !== "cancellation" && !amenitiesString.includes(amenity)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-    // 7. Main filter function: loops over each card and shows/hides it
-    function filterHotels() {
-        const selectedPrices = getCheckedValues(priceCheckboxes);
-        const selectedStars = getCheckedValues(starCheckboxes);
-        const selectedRatings = getCheckedValues(ratingCheckboxes);
-        const selectedAmenities = getCheckedValues(amenityCheckboxes);
-
-        let visibleCount = 0;
-
-        hotelCards.forEach(function (card) {
-            const price = parseInt(card.dataset.price) || 0;
-            const stars = card.dataset.stars;
-            const rating = parseFloat(card.dataset.rating) || 0;
-            const amenities = (card.dataset.amenities || "").toLowerCase();
-            const hasFreeCancel = card.dataset.cancellation === "true";
-
-            // Run each check
-            const matchesPrice = checkPriceMatch(price, selectedPrices);
-            const matchesStars = checkStarMatch(stars, selectedStars);
-            const matchesRating = checkRatingMatch(rating, selectedRatings);
-            const matchesAmenities = checkAmenitiesMatch(amenities, hasFreeCancel, selectedAmenities);
-
-            const isVisible = matchesPrice && matchesStars && matchesRating && matchesAmenities;
-
-            card.style.display = isVisible ? "grid" : "none";
-            if (isVisible) {
-                visibleCount++;
-            }
-        });
-
-        // Update count and show/hide empty state
-        countDisplay.textContent = visibleCount + " properties found in {{ city }}";
-        emptyState.style.display = (visibleCount === 0) ? "block" : "none";
-    }
-
-
-    // 8. Sorting function: re-orders card elements in the DOM
-    function sortHotels() {
-        const sortChoice = sortSelect.value;
-        const cardsArray = Array.from(hotelCards);
-
-        cardsArray.sort(function (cardA, cardB) {
-            const priceA = parseInt(cardA.dataset.price) || 0;
-            const priceB = parseInt(cardB.dataset.price) || 0;
-            const ratingA = parseFloat(cardA.dataset.rating) || 0;
-            const ratingB = parseFloat(cardB.dataset.rating) || 0;
-
-            if (sortChoice === "price_low") return priceA - priceB;
-            if (sortChoice === "price_high") return priceB - priceA;
-            if (sortChoice === "rating_high") return ratingB - ratingA;
-            return (parseInt(cardA.dataset.id) || 0) - (parseInt(cardB.dataset.id) || 0); // Recommended
-        });
-
-        // Re-insert sorted cards back into the container
-        cardsArray.forEach(function (card) {
-            hotelList.insertBefore(card, emptyState);
-        });
-    }
-
-
-    // 9. Reset function: unchecks all boxes and restores default order
-    function resetAllFilters() {
-        const allCheckboxes = [
-            ...priceCheckboxes,
-            ...starCheckboxes,
-            ...ratingCheckboxes,
-            ...amenityCheckboxes
-        ];
-
-        allCheckboxes.forEach(function (cb) {
-            cb.checked = false;
-        });
-
-        sortSelect.value = "recommended";
-        sortHotels();
-        filterHotels();
-    }
-
-
-    // 10. Attach event listeners to all controls
-    const allCheckboxes = [
-        ...priceCheckboxes,
-        ...starCheckboxes,
-        ...ratingCheckboxes,
-        ...amenityCheckboxes
-    ];
-
-    allCheckboxes.forEach(function (checkbox) {
-        checkbox.addEventListener("change", filterHotels);
-    });
-
-    sortSelect.addEventListener("change", function () {
-        sortHotels();
-        filterHotels();
-    });
-
-    if (clearBtn) clearBtn.addEventListener("click", resetAllFilters);
-    if (resetBtn) resetBtn.addEventListener("click", resetAllFilters);
-
-    // Initial run on page load
-    sortHotels();
-    filterHotels();
-});
-</script>
 {% endblock %}

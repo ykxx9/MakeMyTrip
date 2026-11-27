@@ -205,6 +205,437 @@ def get_sample_hotels(city):
     ]
 
 
+def check_hotel_price_match(price, selected_ranges):
+    """Checks if hotel price falls within any selected price range."""
+    if not selected_ranges:
+        return True
+    for r in selected_ranges:
+        if r == 'budget' and price < 2500:
+            return True
+        if r == 'mid' and 2500 <= price <= 6000:
+            return True
+        if r == 'premium' and 6000 < price <= 10000:
+            return True
+        if r == 'luxury' and price > 10000:
+            return True
+    return False
+
+
+def filter_and_sort_hotels(hotels, selected_prices=None, selected_stars=None,
+                           selected_ratings=None, selected_amenities=None,
+                           sort_by='recommended'):
+    """
+    Filters and sorts hotel listings in pure Python, replacing client-side JavaScript.
+    """
+    filtered = []
+    for h in hotels:
+        # 1. Price range filter
+        if selected_prices and not check_hotel_price_match(h['price'], selected_prices):
+            continue
+
+        # 2. Star rating filter
+        if selected_stars and str(h['stars']) not in selected_stars:
+            continue
+
+        # 3. User review score filter
+        if selected_ratings:
+            match_rating = False
+            for min_r in selected_ratings:
+                try:
+                    if h['rating'] >= float(min_r):
+                        match_rating = True
+                        break
+                except ValueError:
+                    pass
+            if not match_rating:
+                continue
+
+        # 4. Amenities filter
+        if selected_amenities:
+            hotel_amenities_lower = [a.lower() for a in h.get('amenities', [])]
+            match_all_amenities = True
+            for a in selected_amenities:
+                if a == 'cancellation':
+                    if not h.get('free_cancellation', False):
+                        match_all_amenities = False
+                        break
+                else:
+                    if not any(a.lower() in item for item in hotel_amenities_lower):
+                        match_all_amenities = False
+                        break
+            if not match_all_amenities:
+                continue
+
+        filtered.append(h)
+
+    # Sorting
+    if sort_by == 'price_low':
+        filtered.sort(key=lambda x: x['price'])
+    elif sort_by == 'price_high':
+        filtered.sort(key=lambda x: x['price'], reverse=True)
+    elif sort_by == 'rating_high':
+        filtered.sort(key=lambda x: x['rating'], reverse=True)
+    else:
+        filtered.sort(key=lambda x: x['id'])
+
+    return filtered
+
+
+def get_sample_flights(from_city=None, to_city=None):
+    """
+    Returns realistic domestic flight options between two cities.
+    """
+    origin = from_city or 'New Delhi'
+    destination = to_city or 'Mumbai'
+    return [
+        {
+            'id': 1,
+            'airline': 'IndiGo',
+            'airline_slug': 'indigo',
+            'flight_code': '6E - Sample Flight',
+            'from_city': origin,
+            'to_city': destination,
+            'departure_time': '06:00',
+            'arrival_time': '08:15',
+            'duration': '2h 15m',
+            'duration_minutes': 135,
+            'stops': 0,
+            'stops_label': 'Non Stop',
+            'price': 4500,
+            'price_formatted': '4,500',
+            'recommended_rank': 1,
+        },
+        {
+            'id': 2,
+            'airline': 'Air India',
+            'airline_slug': 'air-india',
+            'flight_code': 'AI - Sample Flight',
+            'from_city': origin,
+            'to_city': destination,
+            'departure_time': '09:30',
+            'arrival_time': '12:00',
+            'duration': '2h 30m',
+            'duration_minutes': 150,
+            'stops': 0,
+            'stops_label': 'Non Stop',
+            'price': 5200,
+            'price_formatted': '5,200',
+            'recommended_rank': 2,
+        },
+        {
+            'id': 3,
+            'airline': 'Akasa Air',
+            'airline_slug': 'akasa-air',
+            'flight_code': 'QP - Sample Flight',
+            'from_city': origin,
+            'to_city': destination,
+            'departure_time': '14:00',
+            'arrival_time': '16:20',
+            'duration': '2h 20m',
+            'duration_minutes': 140,
+            'stops': 0,
+            'stops_label': 'Non Stop',
+            'price': 4850,
+            'price_formatted': '4,850',
+            'recommended_rank': 3,
+        },
+        {
+            'id': 4,
+            'airline': 'SpiceJet',
+            'airline_slug': 'spicejet',
+            'flight_code': 'SG - Sample Flight',
+            'from_city': origin,
+            'to_city': destination,
+            'departure_time': '18:45',
+            'arrival_time': '22:15',
+            'duration': '3h 30m',
+            'duration_minutes': 210,
+            'stops': 1,
+            'stops_label': '1 Stop',
+            'price': 3999,
+            'price_formatted': '3,999',
+            'recommended_rank': 4,
+        },
+    ]
+
+
+def get_flight_time_category(time_string):
+    """
+    Categorizes departure time ('06:00') into early, morning, afternoon, or evening.
+    """
+    try:
+        hour = int(time_string.split(':')[0])
+    except (ValueError, IndexError):
+        hour = 0
+    if hour < 6:
+        return 'early'
+    elif hour < 12:
+        return 'morning'
+    elif hour < 18:
+        return 'afternoon'
+    else:
+        return 'evening'
+
+
+def filter_and_sort_flights(flights, stops=None, times=None, airlines=None, sort_by='recommended'):
+    """
+    Filters and sorts a list of flights using pure Python logic, replacing JavaScript.
+    """
+    filtered = []
+    for fl in flights:
+        # 1. Stops filter
+        if stops:
+            match_stop = False
+            for s in stops:
+                if s == '2' and fl['stops'] >= 2:
+                    match_stop = True
+                    break
+                elif str(fl['stops']) == s:
+                    match_stop = True
+                    break
+            if not match_stop:
+                continue
+
+        # 2. Time category filter
+        if times:
+            cat = get_flight_time_category(fl['departure_time'])
+            if cat not in times:
+                continue
+
+        # 3. Airline filter
+        if airlines:
+            if fl['airline_slug'] not in airlines:
+                continue
+
+        filtered.append(fl)
+
+    # Sorting
+    if sort_by == 'cheapest':
+        filtered.sort(key=lambda x: x['price'])
+    elif sort_by == 'fastest':
+        filtered.sort(key=lambda x: x['duration_minutes'])
+    else:
+        filtered.sort(key=lambda x: x['recommended_rank'])
+
+    return filtered
+
+
+def get_sample_holiday_packages(destination_filter=None, theme_filter=None):
+    """
+    Returns curated holiday tour packages with inclusions, ratings, and pricing.
+    Supports filtering by destination keyword or theme.
+    """
+    packages = [
+        {
+            'id': 1,
+            'title': 'Magical Kashmir Valley with Luxury Houseboat Stay',
+            'destination': 'Kashmir',
+            'duration': '5 Days / 4 Nights',
+            'price': '18,499',
+            'original_price': '24,000',
+            'rating': 4.9,
+            'reviews_count': '1,240',
+            'theme': 'Honeymoon',
+            'inclusions': ['Flights Included', '4-Star Hotels', 'Daily Breakfast & Dinner', 'Dal Lake Shikara', 'Private Cab'],
+            'image': 'travel/images/kashmir.jpg',
+            'is_static_image': True,
+        },
+        {
+            'id': 2,
+            'title': 'Goa Beachfront Escape with Sunset Island Cruise',
+            'destination': 'Goa',
+            'duration': '4 Days / 3 Nights',
+            'price': '12,999',
+            'original_price': '17,500',
+            'rating': 4.8,
+            'reviews_count': '2,150',
+            'theme': 'Beach',
+            'inclusions': ['Beachfront Resort', 'Airport Transfers', 'North & South Goa Tours', 'Water Sports Pass', 'Breakfast'],
+            'image': 'travel/images/goa.jpg',
+            'is_static_image': True,
+        },
+        {
+            'id': 3,
+            'title': 'Scenic Kerala Backwaters & Munnar Tea Plantation',
+            'destination': 'Kerala',
+            'duration': '6 Days / 5 Nights',
+            'price': '21,500',
+            'original_price': '28,000',
+            'rating': 4.9,
+            'reviews_count': '980',
+            'theme': 'Family',
+            'inclusions': ['Deluxe Houseboat Stay', 'Munnar Hill Resort', 'Spice Plantation Tour', 'Private AC Cab', 'All Meals'],
+            'image': 'travel/images/kerala.jpg',
+            'is_static_image': True,
+        },
+        {
+            'id': 4,
+            'title': 'Himachal Snow Adventure & Rohtang Pass Excursion',
+            'destination': 'Manali',
+            'duration': '5 Days / 4 Nights',
+            'price': '15,800',
+            'original_price': '21,000',
+            'rating': 4.7,
+            'reviews_count': '1,410',
+            'theme': 'Mountains',
+            'inclusions': ['Mountain View Resort', 'Solang Valley Tour', 'Rohtang Pass Permit', 'Bonfire Night', 'Daily Meals'],
+            'image': 'travel/images/manali.jpg',
+            'is_static_image': True,
+        },
+        {
+            'id': 5,
+            'title': 'Royal Rajasthan Heritage, Forts & Desert Safari',
+            'destination': 'Rajasthan',
+            'duration': '6 Days / 5 Nights',
+            'price': '24,999',
+            'original_price': '32,000',
+            'rating': 4.8,
+            'reviews_count': '870',
+            'theme': 'Heritage',
+            'inclusions': ['Heritage Haveli Stays', 'Sam Sand Dunes Camp', 'Camel Safari & Folk Dance', 'Fort Entry Passes'],
+            'image': 'https://images.unsplash.com/photo-1599661046289-e31897846e41?w=600&auto=format&fit=crop&q=80',
+            'is_static_image': False,
+        },
+        {
+            'id': 6,
+            'title': 'Andaman Island Paradise with Coral Reef Scuba Diving',
+            'destination': 'Andaman',
+            'duration': '6 Days / 5 Nights',
+            'price': '28,999',
+            'original_price': '36,500',
+            'rating': 4.9,
+            'reviews_count': '1,110',
+            'theme': 'Adventure',
+            'inclusions': ['Radhanagar Beach Resort', 'Havelock Island Cruise Ferry', 'Intro Scuba Session', 'Cellular Jail Light & Sound'],
+            'image': 'https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?w=600&auto=format&fit=crop&q=80',
+            'is_static_image': False,
+        },
+    ]
+
+    # Filter by destination keyword if provided
+    if destination_filter and destination_filter.strip():
+        search_query = destination_filter.strip().lower()
+        packages = [
+            pkg for pkg in packages
+            if search_query in pkg['destination'].lower() or search_query in pkg['title'].lower()
+        ]
+
+    # Filter by theme category if provided
+    if theme_filter and theme_filter.strip() and theme_filter.strip().lower() != 'all':
+        theme_query = theme_filter.strip().lower()
+        packages = [
+            pkg for pkg in packages
+            if theme_query == pkg['theme'].lower()
+        ]
+
+    return packages
+
+
+def get_sample_trains(from_station=None, to_station=None):
+    """
+    Returns realistic train listings for Indian Railways with running days,
+    stations, timings, duration, and seat availability across classes.
+    """
+    origin = from_station or 'New Delhi (NDLS)'
+    destination = to_station or 'Varanasi Jn (BSB)'
+
+    trains = [
+        {
+            'number': '22436',
+            'name': 'Vande Bharat Express',
+            'from_station': origin,
+            'to_station': destination,
+            'departure_time': '06:00',
+            'arrival_time': '14:00',
+            'duration': '08h 00m',
+            'running_days': [
+                {'code': 'M', 'name': 'Mon', 'active': True},
+                {'code': 'T', 'name': 'Tue', 'active': True},
+                {'code': 'W', 'name': 'Wed', 'active': True},
+                {'code': 'T', 'name': 'Thu', 'active': False},
+                {'code': 'F', 'name': 'Fri', 'active': True},
+                {'code': 'S', 'name': 'Sat', 'active': True},
+                {'code': 'S', 'name': 'Sun', 'active': True},
+            ],
+            'classes': [
+                {'code': 'CC', 'name': 'AC Chair Car', 'price': '₹1,750', 'status': 'AVAILABLE 42', 'status_type': 'available'},
+                {'code': 'EC', 'name': 'Exec Chair Car', 'price': '₹3,300', 'status': 'AVAILABLE 12', 'status_type': 'available'},
+            ],
+        },
+        {
+            'number': '12560',
+            'name': 'Shiv Ganga Superfast Express',
+            'from_station': origin,
+            'to_station': destination,
+            'departure_time': '20:05',
+            'arrival_time': '06:10',
+            'duration': '10h 05m',
+            'running_days': [
+                {'code': 'M', 'name': 'Mon', 'active': True},
+                {'code': 'T', 'name': 'Tue', 'active': True},
+                {'code': 'W', 'name': 'Wed', 'active': True},
+                {'code': 'T', 'name': 'Thu', 'active': True},
+                {'code': 'F', 'name': 'Fri', 'active': True},
+                {'code': 'S', 'name': 'Sat', 'active': True},
+                {'code': 'S', 'name': 'Sun', 'active': True},
+            ],
+            'classes': [
+                {'code': 'SL', 'name': 'Sleeper', 'price': '₹445', 'status': 'RAC 18', 'status_type': 'rac'},
+                {'code': '3A', 'name': 'AC 3 Tier', 'price': '₹1,180', 'status': 'AVAILABLE 28', 'status_type': 'available'},
+                {'code': '2A', 'name': 'AC 2 Tier', 'price': '₹1,690', 'status': 'AVAILABLE 14', 'status_type': 'available'},
+                {'code': '1A', 'name': 'AC 1st Class', 'price': '₹2,850', 'status': 'AVAILABLE 04', 'status_type': 'available'},
+            ],
+        },
+        {
+            'number': '15128',
+            'name': 'Kashi Vishwanath Express',
+            'from_station': origin,
+            'to_station': destination,
+            'departure_time': '11:35',
+            'arrival_time': '04:40',
+            'duration': '17h 05m',
+            'running_days': [
+                {'code': 'M', 'name': 'Mon', 'active': True},
+                {'code': 'T', 'name': 'Tue', 'active': True},
+                {'code': 'W', 'name': 'Wed', 'active': True},
+                {'code': 'T', 'name': 'Thu', 'active': True},
+                {'code': 'F', 'name': 'Fri', 'active': True},
+                {'code': 'S', 'name': 'Sat', 'active': True},
+                {'code': 'S', 'name': 'Sun', 'active': True},
+            ],
+            'classes': [
+                {'code': 'SL', 'name': 'Sleeper', 'price': '₹420', 'status': 'WL 12', 'status_type': 'wl'},
+                {'code': '3A', 'name': 'AC 3 Tier', 'price': '₹1,140', 'status': 'AVAILABLE 08', 'status_type': 'available'},
+                {'code': '2A', 'name': 'AC 2 Tier', 'price': '₹1,630', 'status': 'AVAILABLE 06', 'status_type': 'available'},
+            ],
+        },
+        {
+            'number': '12952',
+            'name': 'Mumbai Tejas Rajdhani Express',
+            'from_station': origin,
+            'to_station': destination,
+            'departure_time': '16:55',
+            'arrival_time': '08:35',
+            'duration': '15h 40m',
+            'running_days': [
+                {'code': 'M', 'name': 'Mon', 'active': True},
+                {'code': 'T', 'name': 'Tue', 'active': True},
+                {'code': 'W', 'name': 'Wed', 'active': True},
+                {'code': 'T', 'name': 'Thu', 'active': True},
+                {'code': 'F', 'name': 'Fri', 'active': True},
+                {'code': 'S', 'name': 'Sat', 'active': True},
+                {'code': 'S', 'name': 'Sun', 'active': True},
+            ],
+            'classes': [
+                {'code': '3A', 'name': 'AC 3 Tier', 'price': '₹2,420', 'status': 'AVAILABLE 64', 'status_type': 'available'},
+                {'code': '2A', 'name': 'AC 2 Tier', 'price': '₹3,410', 'status': 'AVAILABLE 22', 'status_type': 'available'},
+                {'code': '1A', 'name': 'AC 1st Class', 'price': '₹5,120', 'status': 'AVAILABLE 08', 'status_type': 'available'},
+            ],
+        },
+    ]
+    return trains
+
+
 def get_coming_soon_details(service_key, default_title='Service'):
     """
     Returns structured data for the Coming Soon page based on the requested service.
@@ -337,10 +768,23 @@ def home(request):
 
 
 def coming_soon(request, service_key):
-    """Clean, minimal Coming Soon page for upcoming services."""
+    """Clean, minimal Coming Soon page for upcoming services handled with Python."""
     service = get_coming_soon_details(service_key)
+    notified = False
+    email = ''
+
+    if request.method == 'POST':
+        email = request.POST.get('email', '').strip()
+        if email:
+            notified = True
+    elif request.GET.get('notified'):
+        email = request.GET.get('email', '').strip()
+        notified = True
+
     return render(request, 'travel/coming_soon.html', {
         'service': service,
+        'notified': notified,
+        'email': email,
     })
 
 
@@ -379,7 +823,7 @@ def hotels(request):
 def hotel_results(request):
     """
     Hotel listings view: extracts search filters from the URL query parameters
-    and sends the matching hotel list to the template.
+    and filters/sorts the hotel list using pure Python logic.
     """
     today, tomorrow = get_today_and_tomorrow()
 
@@ -389,21 +833,39 @@ def hotel_results(request):
     checkout = request.GET.get('checkout', tomorrow)
     rooms = request.GET.get('rooms', '1')
     guests = request.GET.get('guests', '2')
-    price_category = request.GET.get('price_category', 'all')
 
-    # 2. Get hotel listings for the requested city
-    hotel_list = get_sample_hotels(city)
+    # 2. Read filter selections (supports multi-select)
+    selected_prices = request.GET.getlist('price_category')
+    selected_stars = request.GET.getlist('stars')
+    selected_ratings = request.GET.getlist('rating')
+    selected_amenities = request.GET.getlist('amenity')
+    sort_by = request.GET.get('sort', 'recommended')
 
-    # 3. Build context dictionary for the template
+    # 3. Get hotel listings for the requested city and filter/sort in Python
+    all_hotels = get_sample_hotels(city)
+    filtered_hotels = filter_and_sort_hotels(
+        hotels=all_hotels,
+        selected_prices=selected_prices,
+        selected_stars=selected_stars,
+        selected_ratings=selected_ratings,
+        selected_amenities=selected_amenities,
+        sort_by=sort_by,
+    )
+
+    # 4. Build context dictionary for the template
     context = {
         'city': city,
         'checkin': checkin,
         'checkout': checkout,
         'rooms': rooms,
         'guests': guests,
-        'price_category': price_category,
-        'hotels': hotel_list,
-        'hotel_count': len(hotel_list),
+        'hotels': filtered_hotels,
+        'hotel_count': len(filtered_hotels),
+        'selected_prices': selected_prices,
+        'selected_stars': selected_stars,
+        'selected_ratings': selected_ratings,
+        'selected_amenities': selected_amenities,
+        'sort_by': sort_by,
         'today': today,
         'tomorrow': tomorrow,
     }
@@ -428,11 +890,11 @@ def flight_search(request):
 def flight_results(request):
     """
     Flight results view: extracts user parameters from request.GET,
-    validates one-way vs round-trip logic, and renders the results page.
+    validates one-way vs round-trip logic, and filters/sorts flights using pure Python.
     """
     trip_type = request.GET.get('trip_type', 'one_way')
-    from_city = request.GET.get('from', '')
-    to_city = request.GET.get('to', '')
+    from_city = request.GET.get('from', 'New Delhi').strip() or 'New Delhi'
+    to_city = request.GET.get('to', 'Mumbai').strip() or 'Mumbai'
     departure = request.GET.get('departure', '')
     return_date = request.GET.get('return_date', request.GET.get('return', ''))
     travellers = request.GET.get('travellers', '1')
@@ -441,6 +903,21 @@ def flight_results(request):
     if trip_type == 'one_way':
         return_date = ''
 
+    # Read filter query parameters (multiple values supported)
+    selected_stops = request.GET.getlist('stops')
+    selected_times = request.GET.getlist('time')
+    selected_airlines = request.GET.getlist('airline')
+    sort_by = request.GET.get('sort', 'recommended')
+
+    all_flights = get_sample_flights(from_city=from_city, to_city=to_city)
+    filtered_flights = filter_and_sort_flights(
+        flights=all_flights,
+        stops=selected_stops,
+        times=selected_times,
+        airlines=selected_airlines,
+        sort_by=sort_by,
+    )
+
     context = {
         'trip_type': trip_type,
         'from_city': from_city,
@@ -448,5 +925,113 @@ def flight_results(request):
         'departure': departure,
         'return_date': return_date,
         'travellers': travellers,
+        'flights': filtered_flights,
+        'flight_count': len(filtered_flights),
+        'selected_stops': selected_stops,
+        'selected_times': selected_times,
+        'selected_airlines': selected_airlines,
+        'sort_by': sort_by,
     }
     return render(request, 'travel/flights.html', context)
+
+
+# ==============================================================================
+# HOLIDAY PACKAGES & TRAINS VIEWS
+# ==============================================================================
+
+def holidays(request):
+    """
+    Holiday packages discovery and search view.
+    Supports filtering packages by destination, theme, and duration.
+    """
+    today, tomorrow = get_today_and_tomorrow()
+    destination = request.GET.get('destination', '').strip()
+    theme = request.GET.get('theme', '').strip()
+    from_city = request.GET.get('from_city', 'New Delhi').strip()
+    duration = request.GET.get('duration', '').strip()
+    travel_date = request.GET.get('date', today)
+
+    packages = get_sample_holiday_packages(
+        destination_filter=destination,
+        theme_filter=theme,
+    )
+
+    context = {
+        'today': today,
+        'tomorrow': tomorrow,
+        'travel_date': travel_date,
+        'from_city': from_city,
+        'destination': destination,
+        'current_theme': theme,
+        'duration': duration,
+        'packages': packages,
+    }
+    return render(request, 'travel/holidays.html', context)
+
+
+def trains(request):
+    """
+    Train ticket search and IRCTC booking view with pure Python logic.
+    Handles mode switching (book, pnr, live) and PNR/live train lookups.
+    """
+    today, tomorrow = get_today_and_tomorrow()
+    mode = request.GET.get('mode', 'book')
+    from_station = request.GET.get('from_station', 'New Delhi (NDLS)').strip()
+    to_station = request.GET.get('to_station', 'Varanasi Jn (BSB)').strip()
+    travel_date = request.GET.get('date', today)
+    train_class = request.GET.get('train_class', '').strip()
+    quota = request.GET.get('quota', 'GN').strip()
+
+    # PNR Status Check in Python
+    pnr_query = request.GET.get('pnr', '').strip()
+    pnr_result = None
+    pnr_error = None
+    if pnr_query:
+        mode = 'pnr'
+        if len(pnr_query) == 10 and pnr_query.isdigit():
+            pnr_result = {
+                'pnr': pnr_query,
+                'status': 'CONFIRMED (CNF)',
+                'train': '22436 Vande Bharat Exp',
+                'coach': 'C4',
+                'berth': '24 (Window)',
+            }
+        else:
+            pnr_error = 'Please enter a valid 10-digit IRCTC PNR number.'
+
+    # Live Train Status Check in Python
+    train_num_query = request.GET.get('train_number', '').strip()
+    live_result = None
+    live_error = None
+    if train_num_query:
+        mode = 'live'
+        live_result = {
+            'number': train_num_query,
+            'status': 'Running On Time',
+            'last_departed': 'Kanpur Central (CNB) at 10:12 AM',
+            'next_halt': 'Prayagraj Jn (PRYJ) · Expected at 12:08 PM (Platform 6)',
+        }
+
+    train_list = get_sample_trains(
+        from_station=from_station,
+        to_station=to_station,
+    )
+
+    context = {
+        'today': today,
+        'tomorrow': tomorrow,
+        'travel_date': travel_date,
+        'from_station': from_station,
+        'to_station': to_station,
+        'train_class': train_class,
+        'quota': quota,
+        'trains': train_list,
+        'mode': mode,
+        'pnr_query': pnr_query,
+        'pnr_result': pnr_result,
+        'pnr_error': pnr_error,
+        'train_num_query': train_num_query,
+        'live_result': live_result,
+        'live_error': live_error,
+    }
+    return render(request, 'travel/trains.html', context)

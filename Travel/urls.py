@@ -24,11 +24,9 @@ urlpatterns = [
     path('homestays/', views.coming_soon,
          {'service_key': 'homestays'}, name='homestays'),
 
-    path('holidays/', views.service_page,
-         {'page_title': 'Holiday Packages'}, name='holidays'),
+    path('holidays/', views.holidays, name='holidays'),
 
-    path('trains/', views.coming_soon,
-         {'service_key': 'trains'}, name='trains'),
+    path('trains/', views.trains, name='trains'),
 
     path('buses/', views.coming_soon,
          {'service_key': 'buses'}, name='buses'),
