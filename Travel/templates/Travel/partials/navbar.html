@@ -1,0 +1,111 @@
+
+{% load static %}
+
+<header class="mmt-header">
+
+    <!-- TOP HEADER ROW -->
+    <div class="mmt-top-header">
+
+        <!-- LOGO -->
+        <div class="mmt-brand">
+            <a href="{% url 'home' %}">
+                <img
+                    src="{% static 'travel/images/makemytrip-logo.png' %}"
+                    alt="MakeMyTrip"
+                    class="mmt-logo"
+                >
+            </a>
+        </div>
+
+        <!-- USER NAVIGATION -->
+        <div class="mmt-user-actions">
+
+            <a href="#" class="mmt-user-link">
+                <img src="{% static 'travel/images/icon_heart.svg' %}" alt="Wishlist" class="user-link-icon" width="16" height="16">
+                Wishlist
+            </a>
+
+            <a href="{% url 'my_trips' %}" class="mmt-user-link">
+                <img src="{% static 'travel/images/icon_trips.svg' %}" alt="My Trips" class="user-link-icon" width="16" height="16">
+                My Trips
+            </a>
+
+            <a href="{% url 'login' %}" class="mmt-user-link">
+                <img src="{% static 'travel/images/icon_user.svg' %}" alt="Login" class="user-link-icon" width="16" height="16">
+                <span>Login / Create Account</span>
+            </a>
+
+            <div class="mmt-language">
+                INR | English
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SEPARATE SERVICE NAVIGATION ROW -->
+    <div class="mmt-service-wrapper">
+
+        <nav class="mmt-service-nav">
+
+            <a href="{% url 'flights' %}" class="mmt-service-item">
+                <img src="{% static 'travel/images/icon_flights.svg' %}" alt="Flights" class="service-icon-img" width="32" height="32">
+                <span>Flights</span>
+            </a>
+
+            <a href="{% url 'hotels' %}" class="mmt-service-item">
+                <img src="{% static 'travel/images/icon_hotels.svg' %}" alt="Hotels" class="service-icon-img" width="32" height="32">
+                <span>Hotels</span>
+            </a>
+
+            <a href="{% url 'homestays' %}" class="mmt-service-item">
+                <img src="{% static 'travel/images/icon_villas.svg' %}" alt="Villas & Homestays" class="service-icon-img" width="32" height="32">
+                <span>Villas &amp; Homestays</span>
+            </a>
+
+            <a href="{% url 'holidays' %}" class="mmt-service-item">
+                <img src="{% static 'travel/images/icon_holidays.svg' %}" alt="Holiday Packages" class="service-icon-img" width="32" height="32">
+                <span>Holiday Packages</span>
+            </a>
+
+            <a href="{% url 'trains' %}" class="mmt-service-item">
+                <img src="{% static 'travel/images/icon_trains.svg' %}" alt="Trains" class="service-icon-img" width="32" height="32">
+                <span>Trains</span>
+            </a>
+
+            <a href="{% url 'buses' %}" class="mmt-service-item">
+                <img src="{% static 'travel/images/icon_buses.svg' %}" alt="Buses" class="service-icon-img" width="32" height="32">
+                <span>Buses</span>
+            </a>
+
+            <a href="{% url 'cabs' %}" class="mmt-service-item">
+                <img src="{% static 'travel/images/icon_cabs.svg' %}" alt="Cabs" class="service-icon-img" width="32" height="32">
+                <span>Cabs</span>
+            </a>
+
+            <a href="{% url 'tours' %}" class="mmt-service-item">
+                <img src="{% static 'travel/images/icon_tours.svg' %}" alt="Tours & Attractions" class="service-icon-img" width="32" height="32">
+                <span>Tours &amp; Attractions</span>
+            </a>
+
+            <a href="{% url 'visa' %}" class="mmt-service-item">
+                <img src="{% static 'travel/images/icon_visa.svg' %}" alt="Visa" class="service-icon-img" width="32" height="32">
+                <span>Visa</span>
+            </a>
+
+            <a href="{% url 'forex' %}" class="mmt-service-item">
+                <img src="{% static 'travel/images/icon_forex.svg' %}" alt="Forex Card & Currency" class="service-icon-img" width="32" height="32">
+                <span>Forex Card &amp; Currency</span>
+            </a>
+
+            <a href="{% url 'insurance' %}" class="mmt-service-item">
+                <img src="{% static 'travel/images/icon_insurance.svg' %}" alt="Travel Insurance" class="service-icon-img" width="32" height="32">
+                <span>Travel Insurance</span>
+            </a>
+
+        </nav>
+
+    </div>
+
+</header>

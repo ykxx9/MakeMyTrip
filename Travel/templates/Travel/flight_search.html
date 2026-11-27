@@ -1,0 +1,213 @@
+{% extends 'travel/base.html' %}
+{% load static %}
+
+{% block title %}Flights | MakeMyTrip{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'travel/css/flights.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- MINIMAL FLIGHT SEARCH SECTION -->
+<section class="flight-hero-minimal">
+
+    <div class="flight-container">
+
+        <div class="hero-header">
+            <h1>Find and compare flights</h1>
+            <p>Search real-time fares across domestic and international destinations</p>
+        </div>
+
+        <!-- TRIP TYPE SELECTION -->
+        <div class="trip-type-row">
+            <label class="trip-pill">
+                <input
+                    type="radio"
+                    name="trip_type"
+                    value="one_way"
+                    checked
+                    onchange="setTripType('one_way')"
+                >
+                <span>One Way</span>
+            </label>
+
+            <label class="trip-pill">
+                <input
+                    type="radio"
+                    name="trip_type"
+                    value="round_trip"
+                    onchange="setTripType('round_trip')"
+                >
+                <span>Round Trip</span>
+            </label>
+        </div>
+
+        <!-- MINIMAL SEARCH BOX -->
+        <div class="minimal-search-box">
+
+            <form action="{% url 'flight_results' %}" method="GET" class="search-form-row" id="flightSearchForm">
+
+                <input type="hidden" name="trip_type" id="hiddenTripType" value="one_way">
+
+                <!-- FROM -->
+                <div class="search-cell">
+                    <label for="flight-from">From</label>
+                    <input
+                        type="text"
+                        name="from"
+                        id="flight-from"
+                        placeholder="Departure city"
+                        value="New Delhi"
+                        required
+                    >
+                </div>
+
+                <!-- TO -->
+                <div class="search-cell">
+                    <label for="flight-to">To</label>
+                    <input
+                        type="text"
+                        name="to"
+                        id="flight-to"
+                        placeholder="Destination city"
+                        value="Mumbai"
+                        required
+                    >
+                </div>
+
+                <!-- DEPARTURE -->
+                <div class="search-cell">
+                    <label for="flight-departure">Departure</label>
+                    <input
+                        type="date"
+                        name="departure"
+                        id="flight-departure"
+                        min="{{ today }}"
+                        value="{{ today }}"
+                        required
+                    >
+                </div>
+
+                <!-- RETURN (HIDDEN FOR ONE-WAY) -->
+                <div class="search-cell return-cell" id="returnDateCell">
+                    <label for="flight-return">Return</label>
+                    <input
+                        type="date"
+                        name="return_date"
+                        id="flight-return"
+                        min="{{ tomorrow }}"
+                        value="{{ tomorrow }}"
+                    >
+                </div>
+
+                <!-- TRAVELLERS -->
+                <div class="search-cell">
+                    <label for="flight-travellers">Travellers</label>
+                    <select name="travellers" id="flight-travellers">
+                        <option value="1" selected>1 Traveller · Economy</option>
+                        <option value="2">2 Travellers · Economy</option>
+                        <option value="3">3 Travellers · Economy</option>
+                        <option value="4">4 Travellers · Economy</option>
+                    </select>
+                </div>
+
+                <!-- SUBMIT BUTTON -->
+                <div class="search-btn-cell">
+                    <button type="submit" class="minimal-search-btn">
+                        Search
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+        <!-- POPULAR ROUTE PILLS -->
+        <div class="popular-tags">
+            <span class="tags-label">Popular routes:</span>
+            <button type="button" class="tag-link" onclick="setRoute('New Delhi', 'Mumbai')">Delhi → Mumbai</button>
+            <button type="button" class="tag-link" onclick="setRoute('Mumbai', 'Goa')">Mumbai → Goa</button>
+            <button type="button" class="tag-link" onclick="setRoute('New Delhi', 'Goa')">Delhi → Goa</button>
+            <button type="button" class="tag-link" onclick="setRoute('Bengaluru', 'Kochi')">Bengaluru → Kochi</button>
+            <button type="button" class="tag-link" onclick="setRoute('New Delhi', 'Srinagar')">Delhi → Srinagar</button>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- POPULAR FLIGHT ROUTES GRID -->
+<section class="minimal-routes-section">
+
+    <div class="flight-container">
+
+        <div class="section-top-row">
+            <div>
+                <h2>Popular flight routes</h2>
+                <p>Frequent departures and competitive fares on top sectors</p>
+            </div>
+        </div>
+
+        <div class="minimal-cards-grid">
+
+            {% for route in popular_routes %}
+            <a href="{% url 'flight_results' %}?from={{ route.from_city }}&to={{ route.to_city }}&departure={{ today }}&trip_type=one_way" class="minimal-route-card">
+                <div class="route-thumb">
+                    <img src="{% static route.image %}" alt="{{ route.to_city }}">
+                </div>
+                <div class="route-meta">
+                    <h3 class="route-title">
+                        <span>{{ route.from_city }}</span> → <span>{{ route.to_city }}</span>
+                    </h3>
+                    <p class="route-tag">{{ route.tag }}</p>
+                    <div class="route-bottom-row">
+                        <span class="route-duration">{{ route.duration }}</span>
+                        <span class="route-price">From {{ route.price }}</span>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Toggle return date field visibility when user switches between One Way and Round Trip
+function setTripType(type) {
+    const returnCell = document.getElementById('returnDateCell');
+    const returnInput = document.getElementById('flight-return');
+    const hiddenType = document.getElementById('hiddenTripType');
+
+    // Keep hidden input synchronized for form submission
+    if (hiddenType) {
+        hiddenType.value = type;
+    }
+
+    if (type === 'round_trip') {
+        returnCell.classList.add('active');
+        returnInput.required = true;
+    } else {
+        returnCell.classList.remove('active');
+        returnInput.required = false;
+        returnInput.value = '';
+    }
+}
+
+// Quick-select helper: fills the 'From' and 'To' inputs when a popular route tag is clicked
+function setRoute(fromCity, toCity) {
+    const fromInput = document.getElementById('flight-from');
+    const toInput = document.getElementById('flight-to');
+
+    if (fromInput) fromInput.value = fromCity;
+    if (toInput) toInput.value = toCity;
+}
+</script>
+{% endblock %}

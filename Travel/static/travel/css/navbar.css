@@ -1,0 +1,222 @@
+
+/* =================================
+   MAKEMYTRIP HEADER
+================================= */
+
+.mmt-header {
+    width: 100%;
+    background: #ffffff;
+    position: relative;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    font-family: Arial, sans-serif;
+}
+
+
+/* =================================
+   TOP HEADER ROW
+================================= */
+
+.mmt-top-header {
+    max-width: 1200px;
+    min-height: 76px;
+    margin: auto;
+    padding: 10px 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 25px;
+}
+
+
+/* LOGO */
+
+.mmt-brand {
+    flex-shrink: 0;
+}
+
+.mmt-brand a {
+    display: flex;
+    align-items: center;
+}
+
+.mmt-logo {
+    width: 155px;
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
+
+
+/* USER ACTIONS */
+
+.mmt-user-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 25px;
+}
+
+.mmt-user-link {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    color: #333333;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.user-link-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
+}
+
+.mmt-user-link span:first-child {
+    font-size: 18px;
+}
+
+.mmt-user-link:hover {
+    color: #008cff;
+}
+
+.mmt-language {
+    font-size: 12px;
+    font-weight: 600;
+    color: #333333;
+    white-space: nowrap;
+
+    padding-left: 18px;
+    border-left: 1px solid #dddddd;
+}
+
+
+/* =================================
+   SERVICE NAVIGATION ROW
+================================= */
+
+.mmt-service-wrapper {
+    width: 100%;
+    border-top: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
+    background: #ffffff;
+}
+
+.mmt-service-nav {
+    max-width: 1200px;
+    margin: auto;
+    padding: 12px 15px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.mmt-service-item {
+    min-width: 75px;
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    text-align: center;
+    text-decoration: none;
+    color: #333333;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    white-space: nowrap;
+    transition: color 0.2s ease;
+}
+
+.service-icon-img {
+    width: 32px !important;
+    height: 32px !important;
+    max-width: 32px !important;
+    max-height: 32px !important;
+    object-fit: contain;
+    display: block;
+    flex-shrink: 0;
+    filter: grayscale(100%);
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.mmt-service-item:hover .service-icon-img {
+    transform: scale(1.12);
+    filter: grayscale(0%);
+}
+
+.mmt-service-item:hover {
+    color: #008cff;
+}
+
+
+/* =================================
+   RESPONSIVE NAVIGATION
+================================= */
+
+@media (max-width: 1000px) {
+
+    .mmt-top-header {
+        gap: 15px;
+    }
+
+    .mmt-user-actions {
+        gap: 12px;
+    }
+
+    .mmt-service-nav {
+        justify-content: flex-start;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .mmt-service-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .mmt-service-item {
+        flex: 0 0 95px;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .mmt-top-header {
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 12px;
+    }
+
+    .mmt-logo {
+        width: 140px;
+    }
+
+    .mmt-user-actions {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .mmt-user-link {
+        font-size: 11px;
+    }
+
+    .mmt-language {
+        font-size: 11px;
+    }
+
+}

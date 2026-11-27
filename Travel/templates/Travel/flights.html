@@ -1,0 +1,768 @@
+
+{% extends 'travel/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+.flight-results-page {
+    background: #f2f4f7;
+    min-height: 100vh;
+    padding: 30px 5%;
+    color: #172b4d;
+    font-family: Arial, sans-serif;
+}
+
+.flight-search-summary {
+    background: white;
+    padding: 22px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.06);
+    margin-bottom: 25px;
+}
+
+.route-info {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.route-city h2 {
+    margin: 0;
+    font-size: 23px;
+}
+
+.route-city p {
+    margin: 5px 0 0;
+    color: #777;
+    font-size: 13px;
+}
+
+.route-arrow {
+    font-size: 24px;
+    color: #008cff;
+}
+
+.search-edit-btn {
+    background: #008cff;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    padding: 12px 25px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.results-layout {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 22px;
+}
+
+.filter-panel,
+.results-panel {
+    background: white;
+    border-radius: 12px;
+    padding: 22px;
+}
+
+.filter-panel h3 {
+    margin-top: 0;
+}
+
+.filter-group {
+    border-bottom: 1px solid #eee;
+    padding: 15px 0;
+}
+
+.filter-group h4 {
+    margin: 0 0 12px;
+}
+
+.filter-group label {
+    display: block;
+    color: #555;
+    font-size: 14px;
+    margin: 10px 0;
+    cursor: pointer;
+}
+
+.filter-group input {
+    accent-color: #008cff;
+    cursor: pointer;
+    margin-right: 6px;
+}
+
+.clear-filters {
+    border: none;
+    background: transparent;
+    color: #008cff;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 10px 0;
+}
+
+.results-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.results-heading h2 {
+    margin: 0;
+    font-size: 21px;
+}
+
+.sort-select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.results-count {
+    font-size: 13px;
+    color: #777;
+    margin-bottom: 15px;
+}
+
+.flight-card {
+    border: 1px solid #e7e7e7;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 17px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    align-items: center;
+    gap: 15px;
+    transition: box-shadow .2s, transform .2s;
+}
+
+.flight-card:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,.08);
+    transform: translateY(-2px);
+}
+
+.airline-name {
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.airline-code {
+    color: #888;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.flight-time {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.flight-detail {
+    font-size: 12px;
+    color: #777;
+    margin-top: 5px;
+}
+
+.flight-price {
+    font-size: 21px;
+    font-weight: bold;
+    color: #172b4d;
+}
+
+.book-btn {
+    display: inline-block;
+    background: #008cff;
+    color: white;
+    padding: 11px 20px;
+    border-radius: 7px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.book-btn:hover,
+.search-edit-btn:hover {
+    background: #006fce;
+}
+
+
+
+.no-flights {
+    display: none;
+    text-align: center;
+    padding: 50px 15px;
+    color: #777;
+}
+
+.no-flights h3 {
+    color: #172b4d;
+    font-size: 22px;
+}
+
+.no-flights button {
+    background: #008cff;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 7px;
+    cursor: pointer;
+    margin-top: 12px;
+}
+
+@media(max-width: 800px) {
+    .results-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .flight-card {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .flight-search-summary {
+        align-items: flex-start;
+    }
+}
+
+@media(max-width: 480px) {
+    .flight-results-page {
+        padding: 18px 12px;
+    }
+
+    .flight-card {
+        grid-template-columns: 1fr 1fr;
+        padding: 15px;
+    }
+
+    .route-info {
+        gap: 10px;
+    }
+
+    .flight-time {
+        font-size: 17px;
+    }
+
+    .flight-price {
+        font-size: 18px;
+    }
+}
+</style>
+
+
+<div class="flight-results-page">
+
+    <!-- SEARCH SUMMARY -->
+
+    <div class="flight-search-summary">
+
+        <div class="route-info">
+
+            <div class="route-city">
+                <h2>{{ from_city|default:"From" }}</h2>
+                <p>Departure city</p>
+            </div>
+
+            <div class="route-arrow">→</div>
+
+            <div class="route-city">
+                <h2>{{ to_city|default:"To" }}</h2>
+                <p>Destination</p>
+            </div>
+
+        </div>
+
+        <div>
+            <strong>Departure:</strong>
+            {{ departure|default:"Not selected" }}
+        </div>
+
+        {% if trip_type == 'round_trip' %}
+        <div>
+            <strong>Return:</strong>
+            {{ return_date|default:"Not selected" }}
+        </div>
+        {% endif %}
+
+        <div>
+            <strong>Travellers:</strong>
+            {{ travellers|default:"1" }}
+        </div>
+
+        <button class="search-edit-btn"
+                onclick="window.location.href='/'">
+            Modify Search
+        </button>
+
+    </div>
+
+
+    <!-- RESULTS AND FILTERS -->
+
+    <div class="results-layout">
+
+        <!-- FILTER SIDEBAR -->
+
+        <aside class="filter-panel">
+
+            <h3>Filters</h3>
+
+            <button type="button"
+                    class="clear-filters"
+                    id="clearFilters">
+                Clear All Filters
+            </button>
+
+            <!-- STOPS -->
+
+            <div class="filter-group">
+
+                <h4>Stops</h4>
+
+                <label>
+                    <input type="checkbox"
+                           class="stop-filter"
+                           value="0">
+                    Non Stop
+                </label>
+
+                <label>
+                    <input type="checkbox"
+                           class="stop-filter"
+                           value="1">
+                    1 Stop
+                </label>
+
+                <label>
+                    <input type="checkbox"
+                           class="stop-filter"
+                           value="2">
+                    2+ Stops
+                </label>
+
+            </div>
+
+
+            <!-- DEPARTURE TIME -->
+
+            <div class="filter-group">
+
+                <h4>Departure Time</h4>
+
+                <label>
+                    <input type="checkbox"
+                           class="time-filter"
+                           value="early">
+                    Early Morning (00:00 - 05:59)
+                </label>
+
+                <label>
+                    <input type="checkbox"
+                           class="time-filter"
+                           value="morning">
+                    Morning (06:00 - 11:59)
+                </label>
+
+                <label>
+                    <input type="checkbox"
+                           class="time-filter"
+                           value="afternoon">
+                    Afternoon (12:00 - 17:59)
+                </label>
+
+                <label>
+                    <input type="checkbox"
+                           class="time-filter"
+                           value="evening">
+                    Evening (18:00 - 23:59)
+                </label>
+
+            </div>
+
+
+            <!-- AIRLINES -->
+
+            <div class="filter-group">
+
+                <h4>Airlines</h4>
+
+                <label>
+                    <input type="checkbox"
+                           class="airline-filter"
+                           value="indigo">
+                    IndiGo
+                </label>
+
+                <label>
+                    <input type="checkbox"
+                           class="airline-filter"
+                           value="air-india">
+                    Air India
+                </label>
+
+                <label>
+                    <input type="checkbox"
+                           class="airline-filter"
+                           value="akasa-air">
+                    Akasa Air
+                </label>
+
+                <label>
+                    <input type="checkbox"
+                           class="airline-filter"
+                           value="spicejet">
+                    SpiceJet
+                </label>
+
+            </div>
+
+        </aside>
+
+
+        <!-- FLIGHT RESULTS -->
+
+        <section class="results-panel">
+
+            <div class="results-heading">
+
+                <h2>
+                    Flights from {{ from_city }} to {{ to_city }}
+                </h2>
+
+                <select class="sort-select" id="sortFlights">
+
+                    <option value="recommended">
+                        Recommended
+                    </option>
+
+                    <option value="cheapest">
+                        Cheapest First
+                    </option>
+
+                    <option value="fastest">
+                        Fastest First
+                    </option>
+
+                </select>
+
+            </div>
+
+
+
+
+
+            <div class="results-count" id="resultsCount">
+                Showing 3 flights
+            </div>
+
+
+            <!-- FLIGHT 1 -->
+
+            <div class="flight-card"
+                 data-airline="indigo"
+                 data-stops="0"
+                 data-time="06:00"
+                 data-price="4500"
+                 data-duration="135"
+                 data-recommended="1">
+
+                <div>
+                    <div class="airline-name">IndiGo</div>
+                    <div class="airline-code">6E - Sample Flight</div>
+                </div>
+
+                <div>
+                    <div class="flight-time">06:00</div>
+                    <div class="flight-detail">{{ from_city }}</div>
+                </div>
+
+                <div>
+                    <div class="flight-time">08:15</div>
+                    <div class="flight-detail">{{ to_city }}</div>
+                    <div class="flight-detail">2h 15m · Non Stop</div>
+                </div>
+
+                <div>
+                    <div class="flight-price">₹4,500</div>
+                    <a href="#" class="book-btn">Book Now</a>
+                </div>
+
+            </div>
+
+
+            <!-- FLIGHT 2 -->
+
+            <div class="flight-card"
+                 data-airline="air-india"
+                 data-stops="0"
+                 data-time="09:30"
+                 data-price="5200"
+                 data-duration="150"
+                 data-recommended="2">
+
+                <div>
+                    <div class="airline-name">Air India</div>
+                    <div class="airline-code">AI - Sample Flight</div>
+                </div>
+
+                <div>
+                    <div class="flight-time">09:30</div>
+                    <div class="flight-detail">{{ from_city }}</div>
+                </div>
+
+                <div>
+                    <div class="flight-time">12:00</div>
+                    <div class="flight-detail">{{ to_city }}</div>
+                    <div class="flight-detail">2h 30m · Non Stop</div>
+                </div>
+
+                <div>
+                    <div class="flight-price">₹5,200</div>
+                    <a href="#" class="book-btn">Book Now</a>
+                </div>
+
+            </div>
+
+
+            <!-- FLIGHT 3 -->
+
+            <div class="flight-card"
+                 data-airline="akasa-air"
+                 data-stops="0"
+                 data-time="14:00"
+                 data-price="4850"
+                 data-duration="140"
+                 data-recommended="3">
+
+                <div>
+                    <div class="airline-name">Akasa Air</div>
+                    <div class="airline-code">QP - Sample Flight</div>
+                </div>
+
+                <div>
+                    <div class="flight-time">14:00</div>
+                    <div class="flight-detail">{{ from_city }}</div>
+                </div>
+
+                <div>
+                    <div class="flight-time">16:20</div>
+                    <div class="flight-detail">{{ to_city }}</div>
+                    <div class="flight-detail">2h 20m · Non Stop</div>
+                </div>
+
+                <div>
+                    <div class="flight-price">₹4,850</div>
+                    <a href="#" class="book-btn">Book Now</a>
+                </div>
+
+            </div>
+
+
+            <!-- NO FLIGHTS MESSAGE -->
+
+            <div class="no-flights" id="noFlights">
+
+                <h3>No Flights Found!</h3>
+
+                <p>
+                    Sorry, no flights match your selected filters.
+                    Try changing your filters.
+                </p>
+
+                <button type="button" id="resetFilters">
+                    Clear Filters
+                </button>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<!-- FLIGHT FILTER AND SORTING JAVASCRIPT -->
+<script>
+// ==============================================================================
+// FLIGHT FILTER & SORT LOGIC (Clean, easy-to-read beginner friendly code)
+// ==============================================================================
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    // 1. Grab reference to DOM elements
+    const flightContainer = document.querySelector(".results-panel");
+    const sortSelect = document.getElementById("sortFlights");
+    const resultsCount = document.getElementById("resultsCount");
+    const noFlights = document.getElementById("noFlights");
+    const clearButton = document.getElementById("clearFilters");
+    const resetButton = document.getElementById("resetFilters");
+
+    const stopCheckboxes = document.querySelectorAll(".stop-filter");
+    const timeCheckboxes = document.querySelectorAll(".time-filter");
+    const airlineCheckboxes = document.querySelectorAll(".airline-filter");
+    const flightCards = document.querySelectorAll(".flight-card");
+
+
+    // 2. Helper function: Get checked values from any checkbox group
+    function getCheckedValues(checkboxes) {
+        const values = [];
+        checkboxes.forEach(function (checkbox) {
+            if (checkbox.checked) {
+                values.push(checkbox.value);
+            }
+        });
+        return values;
+    }
+
+
+    // 3. Helper function: Convert departure time ("09:30") to human category
+    function getTimeCategory(timeString) {
+        const hour = parseInt(timeString.split(":")[0]) || 0;
+        if (hour < 6) return "early";       // Early Morning: 00:00 - 05:59
+        if (hour < 12) return "morning";    // Morning: 06:00 - 11:59
+        if (hour < 18) return "afternoon";  // Afternoon: 12:00 - 17:59
+        return "evening";                   // Evening: 18:00 - 23:59
+    }
+
+
+    // 4. Helper function: Check if stops match (0, 1, or 2+ stops)
+    function checkStopsMatch(stopsCount, selectedStops) {
+        if (selectedStops.length === 0) {
+            return true; // No filter selected -> allow all
+        }
+        for (let i = 0; i < selectedStops.length; i++) {
+            const stopVal = selectedStops[i];
+            if (stopVal === "2" && stopsCount >= 2) return true;
+            if (parseInt(stopVal) === stopsCount) return true;
+        }
+        return false;
+    }
+
+
+    // 5. Helper function: Check if departure time category matches
+    function checkTimeMatch(category, selectedTimes) {
+        if (selectedTimes.length === 0) {
+            return true;
+        }
+        return selectedTimes.includes(category);
+    }
+
+
+    // 6. Helper function: Check if airline matches
+    function checkAirlineMatch(airline, selectedAirlines) {
+        if (selectedAirlines.length === 0) {
+            return true;
+        }
+        return selectedAirlines.includes(airline);
+    }
+
+
+    // 7. Main filter function: loops over each flight card and shows/hides it
+    function filterFlights() {
+        const selectedStops = getCheckedValues(stopCheckboxes);
+        const selectedTimes = getCheckedValues(timeCheckboxes);
+        const selectedAirlines = getCheckedValues(airlineCheckboxes);
+
+        let visibleCount = 0;
+
+        flightCards.forEach(function (card) {
+            const airline = card.dataset.airline || "";
+            const stopsCount = parseInt(card.dataset.stops) || 0;
+            const departureTime = card.dataset.time || "";
+            const timeCategory = getTimeCategory(departureTime);
+
+            const matchesStops = checkStopsMatch(stopsCount, selectedStops);
+            const matchesTime = checkTimeMatch(timeCategory, selectedTimes);
+            const matchesAirline = checkAirlineMatch(airline, selectedAirlines);
+
+            const isVisible = matchesStops && matchesTime && matchesAirline;
+
+            card.style.display = isVisible ? "grid" : "none";
+            if (isVisible) {
+                visibleCount++;
+            }
+        });
+
+        // Update counter and toggle "No Flights Found" box
+        resultsCount.textContent = "Showing " + visibleCount + " flight(s)";
+        noFlights.style.display = (visibleCount === 0) ? "block" : "none";
+    }
+
+
+    // 8. Sorting function: re-orders flight cards in the DOM
+    function sortFlights() {
+        const sortValue = sortSelect.value;
+        const cardsArray = Array.from(flightCards);
+
+        cardsArray.sort(function (cardA, cardB) {
+            const priceA = Number(cardA.dataset.price) || 0;
+            const priceB = Number(cardB.dataset.price) || 0;
+            const durationA = Number(cardA.dataset.duration) || 0;
+            const durationB = Number(cardB.dataset.duration) || 0;
+
+            if (sortValue === "cheapest") return priceA - priceB;
+            if (sortValue === "fastest") return durationA - durationB;
+            return (Number(cardA.dataset.recommended) || 0) - (Number(cardB.dataset.recommended) || 0);
+        });
+
+        // Re-insert cards in new sorted order
+        cardsArray.forEach(function (card) {
+            flightContainer.insertBefore(card, noFlights);
+        });
+    }
+
+
+    // 9. Reset function: unchecks all filter checkboxes
+    function resetAllFilters() {
+        const allCheckboxes = [
+            ...stopCheckboxes,
+            ...timeCheckboxes,
+            ...airlineCheckboxes
+        ];
+
+        allCheckboxes.forEach(function (cb) {
+            cb.checked = false;
+        });
+
+        sortSelect.value = "recommended";
+        sortFlights();
+        filterFlights();
+    }
+
+
+    // 10. Attach event listeners
+    const allCheckboxes = [
+        ...stopCheckboxes,
+        ...timeCheckboxes,
+        ...airlineCheckboxes
+    ];
+
+    allCheckboxes.forEach(function (checkbox) {
+        checkbox.addEventListener("change", filterFlights);
+    });
+
+    sortSelect.addEventListener("change", function () {
+        sortFlights();
+        filterFlights();
+    });
+
+    if (clearButton) clearButton.addEventListener("click", resetAllFilters);
+    if (resetButton) resetButton.addEventListener("click", resetAllFilters);
+
+    // Initial run on page load
+    sortFlights();
+    filterFlights();
+});
+</script>
+{% endblock %}

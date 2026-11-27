@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <!-- Headphone band -->
+  <path d="M12 24 C12 17.4 17.4 12 24 12 C30.6 12 36 17.4 36 24" stroke="#6366F1" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <!-- Left earpad -->
+  <rect x="8" y="22" width="7" height="14" rx="3.5" fill="#4F46E5"/>
+  <!-- Right earpad -->
+  <rect x="33" y="22" width="7" height="14" rx="3.5" fill="#4F46E5"/>
+  <!-- Mic arm -->
+  <path d="M36 32 C36 37 32 40 26 40 L24 40" stroke="#6366F1" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <circle cx="22" cy="40" r="2.5" fill="#4338CA"/>
+</svg>
