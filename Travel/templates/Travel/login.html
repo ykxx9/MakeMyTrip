@@ -1,0 +1,324 @@
+{% extends 'travel/base.html' %}
+{% load static %}
+
+
+{% block content %}
+<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .overlay {
+            width: 100%;
+            min-height: 100vh;
+            background: rgba(0, 0, 0, 0.65);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-popup {
+            width: 905px;
+            height: 570px;
+            display: flex;
+            position: relative;
+        }
+
+        .login-popup>img {
+            width: 390px;
+            height: 546px;
+            object-fit: cover;
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+            margin-top: 12px;
+            display: block;
+        }
+
+        .login-section {
+            width: 515px;
+            height: 570px;
+
+            background: #fff;
+            border-radius: 12px;
+
+            padding: 48px 30px 25px;
+
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 0;
+            right: -40px;
+
+            width: 27px;
+            height: 27px;
+
+            border: none;
+            border-radius: 50%;
+            background: white;
+
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        .account-tabs {
+            width: 100%;
+            height: 47px;
+
+            display: flex;
+            align-items: center;
+
+            border-radius: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+
+            padding: 5px;
+            margin-bottom: 25px;
+        }
+
+        .account-tabs button {
+            flex: 1;
+            height: 100%;
+
+            border: none;
+            border-radius: 25px;
+
+            background: white;
+            color: #444;
+
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .account-tabs .active {
+            background: linear-gradient(90deg, #48b4ff, #0860f5);
+            color: white;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .login-form label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #444;
+
+            margin-bottom: 10px;
+        }
+
+        .login-form input {
+            width: 100%;
+            height: 44px;
+
+            border: 1px solid #aaa;
+            border-radius: 4px;
+
+            padding: 12px;
+            font-size: 14px;
+
+            outline: none;
+        }
+
+        .login-form input:focus {
+            border: 1px solid #008cff;
+        }
+
+        .continue-btn {
+            width: 100%;
+            height: 43px;
+
+            margin-top: 20px;
+
+            border: none;
+            border-radius: 25px;
+
+            background: #e8e8e8;
+            color: white;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .mobile-login {
+            text-align: center;
+
+            margin-top: 27px;
+
+            color: #008cff;
+            font-size: 14px;
+            font-weight: bold;
+
+            text-decoration: none;
+        }
+
+        /* DIVIDER */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            margin-top: 28px;
+        }
+
+        .divider span {
+            flex: 1;
+            height: 1px;
+            background: #ddd;
+        }
+
+        .divider p {
+            font-size: 12px;
+            color: #999;
+            white-space: nowrap;
+        }
+
+        /* GOOGLE BUTTON */
+        .google-btn {
+            width: 42px;
+            height: 42px;
+
+            margin: 20px auto;
+
+            border: 1px solid #ddd;
+            border-radius: 50%;
+
+            background: white;
+            cursor: pointer;
+        }
+
+        .google-icon {
+            width:20px;
+            height:20px;
+        }
+
+        /* FOOTER */
+        .footer {
+            position: absolute;
+            bottom: 37px;
+
+            left: 20px;
+            right: 20px;
+
+            text-align: center;
+        }
+
+        .footer p {
+            font-size: 11px;
+            color: #222;
+            line-height: 1.6;
+        }
+
+        .footer a {
+            color: #008cff;
+            text-decoration: none;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+
+            .overlay {
+                padding: 15px;
+            }
+
+            .login-popup {
+                width: 100%;
+                max-width: 515px;
+            }
+
+            .login-popup>img {
+                display: none;
+            }
+
+            .login-section {
+                width: 100%;
+            }
+
+            .close-btn {
+                right: 10px;
+                top: 10px;
+            }
+        }
+
+        @media (max-width: 400px) {
+
+            .login-section {
+                padding: 55px 18px 20px;
+            }
+
+            .account-tabs button {
+                font-size: 11px;
+            }
+
+            .footer {
+                left: 12px;
+                right: 12px;
+            }
+        }
+</style>
+    <div class="overlay">
+        <div class="login-popup">
+            <img alt="" height="540px" width="386px"
+                src="https://promos.makemytrip.com/notification/xhdpi/Launch-Roadblock-386x540-TKM-10Nov.jpg">
+            <div class="login-section">
+                <button class="close-btn">&times;</button>
+                <div class="account-tabs">
+                    <button class="active">PERSONAL ACCOUNT</button>
+                    <button>MYBIZ ACCOUNT</button>
+                </div>
+                <div class="login-form">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Enter Email Address">
+                    <button class="continue-btn">CONTINUE</button>
+                    <a href="#" class="mobile-login">
+                        Login/Signup with Mobile
+                    </a>
+                    <div class="divider">
+                        <span></span>
+                        <p>Or Login/Signup With</p>
+                        <span></span>
+                    </div>
+                    <button class="google-btn">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" class="google-icon">
+                            <g>
+                                <path fill="#EA4335"
+                                    d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z">
+                                </path>
+                                <path fill="#4285F4"
+                                    d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z">
+                                </path>
+                                <path fill="#FBBC05"
+                                    d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z">
+                                </path>
+                                <path fill="#34A853"
+                                    d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z">
+                                </path>
+                                <path fill="none" d="M0 0h48v48H0z"></path>
+                            </g>
+                        </svg>
+                    </button>
+
+                </div>
+                <div class="footer">
+                    <p>
+                        By proceeding, you agree to MakeMyTrip's
+                        <a href="#">Privacy Policy</a>,
+                        <a href="#">User Agreement</a> and
+                        <a href="#">T&Cs</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        
+    </script>
+{% endblock content %}
