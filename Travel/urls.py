@@ -18,33 +18,35 @@ urlpatterns = [
 
     path('flights/', views.flight_search, name='flights'),
 
-    path('hotels/', views.hotels, name='hotels'),
-    path('hotels/results/', views.hotel_results, name='hotel_results'),
+    path('hotels/', views.service_page,
+         {'page_title': 'Hotels'}, name='hotels'),
 
-    path('homestays/', views.coming_soon,
-         {'service_key': 'homestays'}, name='homestays'),
+    path('homestays/', views.service_page,
+         {'page_title': 'Villas & Homestays'}, name='homestays'),
 
-    path('holidays/', views.holidays, name='holidays'),
+    path('holidays/', views.service_page,
+         {'page_title': 'Holiday Packages'}, name='holidays'),
 
-    path('trains/', views.trains, name='trains'),
+    path('trains/', views.service_page,
+         {'page_title': 'Trains'}, name='trains'),
 
-    path('buses/', views.coming_soon,
-         {'service_key': 'buses'}, name='buses'),
+    path('buses/', views.service_page,
+         {'page_title': 'Buses'}, name='buses'),
 
-    path('cabs/', views.coming_soon,
-         {'service_key': 'cabs'}, name='cabs'),
+    path('cabs/', views.service_page,
+         {'page_title': 'Cabs'}, name='cabs'),
 
-    path('tours/', views.coming_soon,
-         {'service_key': 'tours'}, name='tours'),
+    path('tours/', views.service_page,
+         {'page_title': 'Tours & Attractions'}, name='tours'),
 
-    path('visa/', views.coming_soon,
-         {'service_key': 'visa'}, name='visa'),
+    path('visa/', views.service_page,
+         {'page_title': 'Visa'}, name='visa'),
 
-    path('forex/', views.coming_soon,
-         {'service_key': 'forex'}, name='forex'),
+    path('forex/', views.service_page,
+         {'page_title': 'Forex'}, name='forex'),
 
-    path('insurance/', views.coming_soon,
-         {'service_key': 'insurance'}, name='insurance'),
+    path('insurance/', views.service_page,
+         {'page_title': 'Travel Insurance'}, name='insurance'),
 
     path('flights/results/', views.flight_results,
          name='flight_results'),

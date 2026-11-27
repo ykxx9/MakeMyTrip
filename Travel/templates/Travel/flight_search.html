@@ -1,177 +1,211 @@
+
 {% extends 'travel/base.html' %}
 {% load static %}
 
-{% block title %}Flights | MakeMyTrip{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'travel/css/flights.css' %}">
-{% endblock %}
+{% block title %}Search Flights | MakeMyTrip{% endblock %}
 
 {% block content %}
 
-<!-- MINIMAL FLIGHT SEARCH SECTION -->
-<section class="flight-hero-minimal">
+<style>
+.flight-search-page {
+    background: #f2f4f7;
+    min-height: 75vh;
+    padding: 55px 20px;
+    font-family: Arial, sans-serif;
+}
 
-    <div class="flight-container">
+.flight-search-box {
+    max-width: 1100px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.08);
+}
 
-        <div class="hero-header">
-            <h1>Find and compare flights</h1>
-            <p>Search real-time fares across domestic and international destinations</p>
-        </div>
+.flight-search-box h1 {
+    font-size: 27px;
+    margin-bottom: 25px;
+}
 
-        <!-- MINIMAL SEARCH BOX -->
-        <div class="minimal-search-box">
+.trip-options {
+    display: flex;
+    gap: 25px;
+    margin-bottom: 25px;
+}
 
-            <form action="{% url 'flight_results' %}" method="GET" id="flightSearchForm">
+.trip-options label {
+    cursor: pointer;
+    font-weight: 600;
+}
 
-                <!-- TRIP TYPE SELECTION -->
-                <div style="display: flex; gap: 16px; padding: 12px 16px; border-bottom: 1px solid #e1e4e8; background: #fafbfc;">
-                    <label class="trip-pill">
-                        <input
-                            type="radio"
-                            name="trip_type"
-                            value="one_way"
-                            checked
-                        >
-                        <span>One Way</span>
-                    </label>
+.trip-options input {
+    accent-color: #008cff;
+}
 
-                    <label class="trip-pill">
-                        <input
-                            type="radio"
-                            name="trip_type"
-                            value="round_trip"
-                        >
-                        <span>Round Trip</span>
-                    </label>
-                </div>
+.search-fields {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
 
-                <div class="search-form-row">
-                    <!-- FROM -->
-                    <div class="search-cell">
-                        <label for="flight-from">From</label>
-                        <input
-                            type="text"
-                            name="from"
-                            id="flight-from"
-                            placeholder="Departure city"
-                            value="New Delhi"
-                            required
-                        >
-                    </div>
+.search-field {
+    border: 1px solid #ddd;
+    padding: 14px;
+    border-radius: 8px;
+}
 
-                    <!-- TO -->
-                    <div class="search-cell">
-                        <label for="flight-to">To</label>
-                        <input
-                            type="text"
-                            name="to"
-                            id="flight-to"
-                            placeholder="Destination city"
-                            value="Mumbai"
-                            required
-                        >
-                    </div>
+.search-field label {
+    display: block;
+    color: #777;
+    font-size: 12px;
+    margin-bottom: 9px;
+}
 
-                    <!-- DEPARTURE -->
-                    <div class="search-cell">
-                        <label for="flight-departure">Departure</label>
-                        <input
-                            type="date"
-                            name="departure"
-                            id="flight-departure"
-                            min="{{ today }}"
-                            value="{{ today }}"
-                            required
-                        >
-                    </div>
+.search-field input,
+.search-field select {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    background: white;
+}
 
-                    <!-- RETURN -->
-                    <div class="search-cell return-cell" id="returnDateCell">
-                        <label for="flight-return">Return</label>
-                        <input
-                            type="date"
-                            name="return_date"
-                            id="flight-return"
-                            min="{{ tomorrow }}"
-                            value="{{ tomorrow }}"
-                        >
-                    </div>
+.return-field {
+    display: none;
+}
 
-                    <!-- TRAVELLERS -->
-                    <div class="search-cell">
-                        <label for="flight-travellers">Travellers</label>
-                        <select name="travellers" id="flight-travellers">
-                            <option value="1">1 Traveller</option>
-                            <option value="2">2 Travellers</option>
-                            <option value="3">3 Travellers</option>
-                            <option value="4">4+ Travellers</option>
-                        </select>
-                    </div>
+.search-submit {
+    display: block;
+    margin: 30px auto -55px;
+    background: linear-gradient(90deg,#53b2fe,#065af3);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 15px 65px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
-                    <!-- SEARCH BUTTON -->
-                    <div class="search-btn-cell">
-                        <button type="submit" class="minimal-search-btn">
-                            Search Flights
-                        </button>
-                    </div>
-                </div>
+.search-submit:hover {
+    opacity: .9;
+}
 
-            </form>
+@media(max-width:750px) {
+    .search-fields {
+        grid-template-columns: repeat(2,1fr);
+    }
+}
 
-        </div>
+@media(max-width:450px) {
+    .search-fields {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
 
-        <!-- POPULAR ROUTE PILLS -->
-        <div class="popular-tags">
-            <span class="tags-label">Popular routes:</span>
-            <a href="{% url 'flight_results' %}?from=New+Delhi&to=Mumbai&departure={{ today }}&trip_type=one_way" class="tag-link">Delhi → Mumbai</a>
-            <a href="{% url 'flight_results' %}?from=Mumbai&to=Goa&departure={{ today }}&trip_type=one_way" class="tag-link">Mumbai → Goa</a>
-            <a href="{% url 'flight_results' %}?from=New+Delhi&to=Goa&departure={{ today }}&trip_type=one_way" class="tag-link">Delhi → Goa</a>
-            <a href="{% url 'flight_results' %}?from=Bengaluru&to=Kochi&departure={{ today }}&trip_type=one_way" class="tag-link">Bengaluru → Kochi</a>
-            <a href="{% url 'flight_results' %}?from=New+Delhi&to=Srinagar&departure={{ today }}&trip_type=one_way" class="tag-link">Delhi → Srinagar</a>
-        </div>
+<div class="flight-search-page">
 
-    </div>
+    <div class="flight-search-box">
 
-</section>
+        <h1>Book Your Flights</h1>
 
+        <form action="{% url 'flight_results' %}" method="GET">
 
-<!-- POPULAR FLIGHT ROUTES GRID -->
-<section class="minimal-routes-section">
+            <div class="trip-options">
 
-    <div class="flight-container">
+                <label>
+                    <input type="radio"
+                           name="trip_type"
+                           value="one_way"
+                           checked
+                           onclick="toggleReturn(false)">
+                    One Way
+                </label>
 
-        <div class="section-top-row">
-            <div>
-                <h2>Popular flight routes</h2>
-                <p>Frequent departures and competitive fares on top sectors</p>
+                <label>
+                    <input type="radio"
+                           name="trip_type"
+                           value="round_trip"
+                           onclick="toggleReturn(true)">
+                    Round Trip
+                </label>
+
             </div>
-        </div>
 
-        <div class="minimal-cards-grid">
+            <div class="search-fields">
 
-            {% for route in popular_routes %}
-            <a href="{% url 'flight_results' %}?from={{ route.from_city }}&to={{ route.to_city }}&departure={{ today }}&trip_type=one_way" class="minimal-route-card">
-                <div class="route-thumb">
-                    <img src="{% static route.image %}" alt="{{ route.to_city }}">
+                <div class="search-field">
+                    <label>FROM</label>
+                    <input type="text"
+                           name="from"
+                           placeholder="Enter departure city"
+                           required>
                 </div>
-                <div class="route-meta">
-                    <h3 class="route-title">
-                        <span>{{ route.from_city }}</span> → <span>{{ route.to_city }}</span>
-                    </h3>
-                    <p class="route-tag">{{ route.tag }}</p>
-                    <div class="route-bottom-row">
-                        <span class="route-duration">{{ route.duration }}</span>
-                        <span class="route-price">From {{ route.price }}</span>
-                    </div>
-                </div>
-            </a>
-            {% endfor %}
 
-        </div>
+                <div class="search-field">
+                    <label>TO</label>
+                    <input type="text"
+                           name="to"
+                           placeholder="Enter destination city"
+                           required>
+                </div>
+
+                <div class="search-field">
+                    <label>DEPARTURE</label>
+                    <input type="date"
+                           name="departure"
+                           required>
+                </div>
+
+                <div class="search-field return-field"
+                     id="returnField">
+
+                    <label>RETURN</label>
+
+                    <input type="date"
+                           name="return_date"
+                           id="returnDate">
+
+                </div>
+
+                <div class="search-field">
+                    <label>TRAVELLERS</label>
+
+                    <select name="travellers">
+                        <option value="1">1 Traveller</option>
+                        <option value="2">2 Travellers</option>
+                        <option value="3">3 Travellers</option>
+                        <option value="4">4 Travellers</option>
+                        <option value="5">5 Travellers</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <button type="submit" class="search-submit">
+                SEARCH FLIGHTS
+            </button>
+
+        </form>
 
     </div>
 
-</section>
+</div>
+
+<script>
+function toggleReturn(show) {
+    const field = document.getElementById("returnField");
+    const input = document.getElementById("returnDate");
+
+    field.style.display = show ? "block" : "none";
+    input.required = show;
+
+    if (!show) {
+        input.value = "";
+    }
+}
+</script>
 
 {% endblock %}

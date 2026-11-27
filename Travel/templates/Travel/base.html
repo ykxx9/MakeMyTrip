@@ -42,6 +42,12 @@
     <!-- Shared Footer -->
     {% include 'travel/partials/footer.html' %}
 
+    <!-- Common JavaScript -->
+    <script src="{% static 'travel/js/main.js' %}"></script>
+
+    <!-- Page-specific JavaScript -->
+    {% block extra_js %}{% endblock %}
+
 </body>
 
 </html>

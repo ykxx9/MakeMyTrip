@@ -205,14 +205,10 @@
 }
 
 
-/* RETURN DATE VISIBILITY (PURE CSS TOGGLE, NO JS NEEDED) */
+/* RETURN DATE VISIBILITY */
 
-.booking-card:has(input[value="one_way"]:checked) #return-date-group {
+#return-date-group[hidden] {
     display: none !important;
-}
-
-.booking-card:has(input[value="round_trip"]:checked) #return-date-group {
-    display: flex !important;
 }
 
 /* Keep booking fields aligned */

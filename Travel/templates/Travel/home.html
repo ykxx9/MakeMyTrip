@@ -28,9 +28,15 @@ MakeMyTrip | Flights, Hotels & Holidays
     <div class="booking-card">
 
         <div class="booking-tabs">
-            <a href="{% url 'flights' %}" class="booking-tab active" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">Flights</a>
-            <a href="{% url 'hotels' %}" class="booking-tab" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">Hotels</a>
-            <a href="{% url 'holidays' %}" class="booking-tab" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">Holidays</a>
+            <button class="booking-tab active">Flights</button>
+            <button class="booking-tab"
+                    onclick="window.location.href='{% url 'hotels' %}'">
+                Hotels
+            </button>
+            <button class="booking-tab"
+                    onclick="window.location.href='{% url 'holidays' %}'">
+                Holidays
+            </button>
         </div>
 
         <form action="{% url 'flight_results' %}" method="GET">
@@ -92,15 +98,14 @@ MakeMyTrip | Flights, Hotels & Holidays
             type="date"
             name="departure"
             id="departure-date"
-            min="{{ today }}"
-            value="{{ today }}"
             required
         >
     </div>
 
     <!-- RETURN DATE -->
     <div class="form-group"
-         id="return-date-group">
+         id="return-date-group"
+         hidden>
 
         <label>RETURN</label>
 
@@ -108,7 +113,7 @@ MakeMyTrip | Flights, Hotels & Holidays
             type="date"
             name="return_date"
             id="return-date"
-            min="{{ today }}"
+            disabled
         >
 
     </div>
