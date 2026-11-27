@@ -1,0 +1,263 @@
+{% extends 'travel/base.html' %}
+{% load static %}
+
+{% block title %}Holiday Packages | MakeMyTrip{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'travel/css/holidays.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO & SEARCH SECTION -->
+<section class="holiday-hero-minimal">
+
+    <div class="holiday-container">
+
+        <div class="hero-header">
+            <h1>Find your perfect holiday package</h1>
+            <p>All-inclusive holiday packages with flights, handpicked hotels, and curated sightseeing</p>
+        </div>
+
+        <!-- SEARCH BOX -->
+        <div class="minimal-search-box">
+
+            <form action="{% url 'holidays' %}" method="GET" class="search-form-row">
+
+                <!-- FROM CITY -->
+                <div class="search-cell">
+                    <label for="holiday-from">Starting From</label>
+                    <input
+                        type="text"
+                        name="from_city"
+                        id="holiday-from"
+                        placeholder="Departure city"
+                        value="{{ from_city|default:'New Delhi' }}"
+                    >
+                </div>
+
+                <!-- DESTINATION -->
+                <div class="search-cell dest-cell">
+                    <label for="holiday-destination">To / Destination</label>
+                    <input
+                        type="text"
+                        name="destination"
+                        id="holiday-destination"
+                        placeholder="Where do you want to go?"
+                        value="{{ destination }}"
+                    >
+                </div>
+
+                <!-- DEPARTURE DATE -->
+                <div class="search-cell">
+                    <label for="holiday-date">Departure</label>
+                    <input
+                        type="date"
+                        name="date"
+                        id="holiday-date"
+                        min="{{ today }}"
+                        value="{{ travel_date|default:today }}"
+                    >
+                </div>
+
+                <!-- DURATION -->
+                <div class="search-cell">
+                    <label for="holiday-duration">Duration</label>
+                    <select name="duration" id="holiday-duration">
+                        <option value="" {% if not duration %}selected{% endif %}>All Durations</option>
+                        <option value="short" {% if duration == 'short' %}selected{% endif %}>3 to 4 Days</option>
+                        <option value="medium" {% if duration == 'medium' %}selected{% endif %}>5 to 6 Days</option>
+                        <option value="long" {% if duration == 'long' %}selected{% endif %}>7+ Days</option>
+                    </select>
+                </div>
+
+                <!-- GUESTS -->
+                <div class="search-cell">
+                    <label for="holiday-guests">Travellers</label>
+                    <select name="guests" id="holiday-guests">
+                        <option value="2">2 Adults</option>
+                        <option value="1">1 Adult (Solo)</option>
+                        <option value="3">2 Adults · 1 Child</option>
+                        <option value="4">4 Adults (Group)</option>
+                    </select>
+                </div>
+
+                <!-- SUBMIT BUTTON -->
+                <div class="search-btn-cell">
+                    <button type="submit" class="minimal-search-btn">
+                        Search Packages
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+        <!-- POPULAR DESTINATIONS PILLS -->
+        <div class="popular-tags">
+            <span class="tags-label">Trending Destinations:</span>
+            <a href="{% url 'holidays' %}?destination=Kashmir" class="tag-link {% if destination == 'Kashmir' %}active{% endif %}">Kashmir</a>
+            <a href="{% url 'holidays' %}?destination=Goa" class="tag-link {% if destination == 'Goa' %}active{% endif %}">Goa</a>
+            <a href="{% url 'holidays' %}?destination=Kerala" class="tag-link {% if destination == 'Kerala' %}active{% endif %}">Kerala</a>
+            <a href="{% url 'holidays' %}?destination=Manali" class="tag-link {% if destination == 'Manali' %}active{% endif %}">Manali</a>
+            <a href="{% url 'holidays' %}?destination=Rajasthan" class="tag-link {% if destination == 'Rajasthan' %}active{% endif %}">Rajasthan</a>
+            <a href="{% url 'holidays' %}?destination=Andaman" class="tag-link {% if destination == 'Andaman' %}active{% endif %}">Andaman</a>
+            {% if destination %}
+            <a href="{% url 'holidays' %}" class="tag-link" style="color: #666;">Clear Filter ×</a>
+            {% endif %}
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- THEME TABS -->
+<div class="holiday-filter-bar">
+    <div class="holiday-container">
+        <div class="theme-tabs">
+            <a href="{% url 'holidays' %}{% if destination %}?destination={{ destination }}{% endif %}" class="theme-tab {% if not current_theme %}active{% endif %}">
+                All Packages
+            </a>
+            <a href="{% url 'holidays' %}?theme=Honeymoon{% if destination %}&destination={{ destination }}{% endif %}" class="theme-tab {% if current_theme == 'Honeymoon' %}active{% endif %}">
+                Honeymoon
+            </a>
+            <a href="{% url 'holidays' %}?theme=Family{% if destination %}&destination={{ destination }}{% endif %}" class="theme-tab {% if current_theme == 'Family' %}active{% endif %}">
+                Family Friendly
+            </a>
+            <a href="{% url 'holidays' %}?theme=Beach{% if destination %}&destination={{ destination }}{% endif %}" class="theme-tab {% if current_theme == 'Beach' %}active{% endif %}">
+                Beaches &amp; Islands
+            </a>
+            <a href="{% url 'holidays' %}?theme=Mountains{% if destination %}&destination={{ destination }}{% endif %}" class="theme-tab {% if current_theme == 'Mountains' %}active{% endif %}">
+                Hills &amp; Mountains
+            </a>
+            <a href="{% url 'holidays' %}?theme=Heritage{% if destination %}&destination={{ destination }}{% endif %}" class="theme-tab {% if current_theme == 'Heritage' %}active{% endif %}">
+                Heritage &amp; Culture
+            </a>
+            <a href="{% url 'holidays' %}?theme=Adventure{% if destination %}&destination={{ destination }}{% endif %}" class="theme-tab {% if current_theme == 'Adventure' %}active{% endif %}">
+                Adventure
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<!-- PACKAGES GRID SECTION -->
+<section class="packages-section">
+
+    <div class="holiday-container">
+
+        <div class="section-top-row">
+            <div>
+                <h2>
+                    {% if destination %}
+                        Holiday packages for {{ destination }}
+                    {% elif current_theme %}
+                        {{ current_theme }} holiday packages
+                    {% else %}
+                        Featured holiday packages
+                    {% endif %}
+                </h2>
+                <p>Curated itineraries with flights, 4-star stays, and transfers included</p>
+            </div>
+            <div class="packages-count">
+                Showing {{ packages|length }} package(s)
+            </div>
+        </div>
+
+        {% if packages %}
+        <div class="packages-grid">
+
+            {% for pkg in packages %}
+            <div class="package-card">
+
+                <div class="package-thumb">
+                    {% if pkg.is_static_image %}
+                        <img src="{% static pkg.image %}" alt="{{ pkg.title }}">
+                    {% else %}
+                        <img src="{{ pkg.image }}" alt="{{ pkg.title }}">
+                    {% endif %}
+                    <span class="duration-badge">{{ pkg.duration }}</span>
+                    <span class="theme-badge">{{ pkg.theme }}</span>
+                </div>
+
+                <div class="package-body">
+
+                    <div class="package-meta-row">
+                        <span class="package-city">{{ pkg.destination }}</span>
+                        <span class="package-rating">★ {{ pkg.rating }} <span style="font-weight: 400; color: #777;">({{ pkg.reviews_count }})</span></span>
+                    </div>
+
+                    <h3 class="package-title">{{ pkg.title }}</h3>
+
+                    <ul class="package-inclusions">
+                        {% for inc in pkg.inclusions %}
+                        <li class="inclusion-chip">{{ inc }}</li>
+                        {% endfor %}
+                    </ul>
+
+                    <div class="package-footer">
+                        <div>
+                            <div class="price-sub">Starting from</div>
+                            <div class="package-price">₹{{ pkg.price }} <span>/ person</span></div>
+                        </div>
+                        <button type="button" class="package-action-btn">
+                            Book Now
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+            {% endfor %}
+
+        </div>
+        {% else %}
+        <div class="empty-results">
+            <h3>No holiday packages found</h3>
+            <p>We could not find packages matching "{{ destination }}". Try exploring Kashmir, Goa, Kerala, or Manali.</p>
+            <a href="{% url 'holidays' %}" class="minimal-search-btn" style="display: inline-block; line-height: 48px; text-decoration: none; margin-top: 14px;">
+                View All Packages
+            </a>
+        </div>
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+<!-- TRUST & PERKS SECTION -->
+<section class="holiday-perks-section">
+
+    <div class="holiday-container">
+
+        <div class="perks-grid">
+
+            <div class="perk-item">
+                <h4>100% Customisable</h4>
+                <p>Tailor flights, hotels, and activities to match your schedule and travel pace.</p>
+            </div>
+
+            <div class="perk-item">
+                <h4>Handpicked 4 &amp; 5-Star Stays</h4>
+                <p>Properties thoroughly verified for cleanliness, amenities, and location.</p>
+            </div>
+
+            <div class="perk-item">
+                <h4>24×7 On-Trip Assistance</h4>
+                <p>Dedicated travel concierges available around the clock while you are on the trip.</p>
+            </div>
+
+            <div class="perk-item">
+                <h4>Transparent Pricing</h4>
+                <p>All-inclusive fares with no surprise hidden fees or checkout charges.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

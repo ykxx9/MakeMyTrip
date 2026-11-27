@@ -1,0 +1,91 @@
+{% extends 'travel/base.html' %}
+{% load static %}
+
+{% block title %}{{ service.title }} | Coming Soon | MakeMyTrip{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'travel/css/coming_soon.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="coming-soon-section">
+
+    <div class="coming-soon-container">
+
+        <!-- BREADCRUMB NAVIGATION -->
+        <div class="coming-soon-nav">
+            <a href="{% url 'home' %}" class="back-link">← Back to Home</a>
+        </div>
+
+        <!-- MAIN CARD -->
+        <div class="coming-soon-card">
+
+            <!-- STATUS BADGE -->
+            <div class="badge-row">
+                <span class="status-pill">Coming Soon</span>
+            </div>
+
+            <!-- SERVICE ICON AVATAR -->
+            <div class="service-icon-avatar">
+                <img src="{% static service.icon %}" alt="{{ service.title }}" width="44" height="44">
+            </div>
+
+            <!-- TITLE & TAGLINE -->
+            <h1 class="service-heading">{{ service.title }}</h1>
+            <p class="service-tagline">{{ service.tagline }}</p>
+            <p class="service-desc">{{ service.description }}</p>
+
+            <!-- KEY FEATURES PREVIEW -->
+            <div class="preview-box">
+                <h3 class="preview-title">What to expect:</h3>
+                <ul class="preview-list">
+                    {% for feature in service.features %}
+                    <li class="preview-item">
+                        <span class="check-mark">✓</span>
+                        <span>{{ feature }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- NOTIFY ME BOX -->
+            <div class="notify-card">
+                <p class="notify-label">Be the first to know when <strong>{{ service.title }}</strong> goes live</p>
+                {% if notified %}
+                <p class="notify-feedback" style="display: block;">
+                    ✓ Thanks! We'll email you at <strong>{{ email }}</strong> the moment {{ service.title }} launches with an early-bird offer.
+                </p>
+                {% else %}
+                <form class="notify-form" method="POST">
+                    {% csrf_token %}
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter your email address"
+                        required
+                        class="notify-input"
+                    >
+                    <button type="submit" class="notify-submit-btn">
+                        Notify Me
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+
+            <!-- ALTERNATIVE ACTION LINKS -->
+            <div class="alternative-row">
+                <span class="alt-label">Explore available services:</span>
+                <div class="alt-buttons">
+                    <a href="{% url 'flights' %}" class="btn-alt">Book Flights →</a>
+                    <a href="{% url 'hotels' %}" class="btn-alt">Book Hotels →</a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

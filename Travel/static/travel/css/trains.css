@@ -1,0 +1,627 @@
+/* ====================================================
+   MINIMAL TRAINS PAGE (CLEAN, MODERN, STREAMLINED)
+   ==================================================== */
+
+:root {
+    --train-primary: #0071c2;
+    --train-primary-hover: #005999;
+    --train-dark: #1a1a1a;
+    --train-muted: #595959;
+    --train-border: #e0e0e0;
+    --train-green: #008009;
+    --train-green-bg: #e6f4ea;
+    --train-amber: #b06000;
+    --train-amber-bg: #fef7e0;
+    --train-red: #c5221f;
+    --train-red-bg: #fce8e6;
+    --train-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    font-family: var(--train-font);
+    color: var(--train-dark);
+}
+
+.train-container {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ====================================================
+   HERO & SEARCH SECTION
+   ==================================================== */
+
+.train-hero-minimal {
+    background: #fbfbfb;
+    border-bottom: 1px solid var(--train-border);
+    padding: 45px 0 40px;
+}
+
+.hero-header {
+    margin-bottom: 20px;
+}
+
+.hero-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--train-dark);
+    margin: 0 0 6px;
+    letter-spacing: -0.3px;
+}
+
+.hero-header p {
+    font-size: 15px;
+    color: var(--train-muted);
+    margin: 0;
+}
+
+/* IRCTC Partner Badge */
+.irctc-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #ffffff;
+    border: 1px solid #d0d7de;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--train-dark);
+    margin-bottom: 14px;
+}
+
+.irctc-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--train-green);
+    border-radius: 50%;
+}
+
+/* Modes Switcher (Book Train / Check PNR / Live Status) */
+.train-nav-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.train-nav-tab {
+    background: #ffffff;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #24292f;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.train-nav-tab:hover {
+    border-color: #8c959f;
+}
+
+.train-nav-tab.active {
+    background: var(--train-primary);
+    border-color: var(--train-primary);
+    color: #ffffff;
+}
+
+/* Search Box Container */
+.minimal-search-box {
+    background: #ffffff;
+    border: 1px solid #d0d7de;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.search-form-row {
+    display: flex;
+    align-items: stretch;
+    flex-wrap: nowrap;
+}
+
+.search-cell {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 16px;
+    border-right: 1px solid #e1e4e8;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #ffffff;
+    transition: background 0.15s;
+}
+
+.search-cell:focus-within {
+    background: #f8fafc;
+}
+
+.search-cell.station-cell {
+    flex: 1.3;
+}
+
+.search-cell label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #586069;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 4px;
+}
+
+.search-cell input,
+.search-cell select {
+    border: none;
+    outline: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--train-dark);
+    background: transparent;
+    width: 100%;
+    padding: 2px 0;
+    font-family: inherit;
+}
+
+.search-cell input::placeholder {
+    color: #8c959f;
+    font-weight: 400;
+}
+
+.search-btn-cell {
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+}
+
+.minimal-search-btn {
+    background: var(--train-primary);
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 0 28px;
+    height: 48px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s, transform 0.05s;
+}
+
+.minimal-search-btn:hover {
+    background: var(--train-primary-hover);
+}
+
+.minimal-search-btn:active {
+    transform: scale(0.99);
+}
+
+/* Quick Route Pills */
+.popular-tags {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+}
+
+.tags-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--train-muted);
+}
+
+.tag-link {
+    background: #ffffff;
+    border: 1px solid #d0d7de;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #24292f;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.tag-link:hover,
+.tag-link.active {
+    border-color: var(--train-primary);
+    color: var(--train-primary);
+    background: #f0f7ff;
+}
+
+/* PNR Panel */
+.pnr-panel {
+    display: none;
+    background: #ffffff;
+    border: 1px solid #d0d7de;
+    border-radius: 8px;
+    padding: 20px 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.pnr-panel.active {
+    display: block;
+}
+
+.pnr-form-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    max-width: 600px;
+}
+
+.pnr-input {
+    flex: 1;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-size: 15px;
+    letter-spacing: 1px;
+    font-family: inherit;
+    outline: none;
+}
+
+.pnr-input:focus {
+    border-color: var(--train-primary);
+}
+
+.pnr-result-box {
+    margin-top: 16px;
+    padding: 14px 16px;
+    border-radius: 6px;
+    background: #f8fafc;
+    border: 1px solid #e1e4e8;
+    font-size: 14px;
+    display: none;
+}
+
+/* ====================================================
+   TRAIN LISTINGS / RESULTS SECTION
+   ==================================================== */
+
+.trains-section {
+    padding: 35px 0 60px;
+}
+
+.trains-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 20px;
+}
+
+.trains-top-row h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 4px;
+    color: var(--train-dark);
+}
+
+.trains-top-row p {
+    font-size: 13px;
+    color: var(--train-muted);
+    margin: 0;
+}
+
+.train-filters-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.filter-chip {
+    background: #ffffff;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #24292f;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.15s;
+}
+
+.filter-chip:hover,
+.filter-chip.active {
+    background: #f0f7ff;
+    border-color: var(--train-primary);
+    color: var(--train-primary);
+}
+
+/* Train Cards */
+.trains-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.train-card {
+    background: #ffffff;
+    border: 1px solid #e1e4e8;
+    border-radius: 8px;
+    padding: 20px 24px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.train-card:hover {
+    border-color: #c0c6cc;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.train-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #f0f2f5;
+    margin-bottom: 16px;
+}
+
+.train-identity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.train-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--train-dark);
+    margin: 0;
+}
+
+.train-number {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--train-muted);
+    background: #f6f8fa;
+    border: 1px solid #e1e4e8;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.train-runs-days {
+    font-size: 12px;
+    color: var(--train-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.day-badge {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: 600;
+    background: #eaecef;
+    color: #6a737d;
+}
+
+.day-badge.active {
+    background: #dafbe1;
+    color: #116329;
+}
+
+/* Journey Schedule Row */
+.train-schedule-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.schedule-station {
+    min-width: 180px;
+}
+
+.schedule-station.dest {
+    text-align: right;
+}
+
+.time-val {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--train-dark);
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.station-name {
+    font-size: 13px;
+    color: var(--train-muted);
+    font-weight: 500;
+}
+
+.journey-duration {
+    text-align: center;
+    flex: 1;
+    padding: 0 20px;
+}
+
+.duration-val {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--train-muted);
+    margin-bottom: 6px;
+}
+
+.duration-line {
+    position: relative;
+    height: 2px;
+    background: #e1e4e8;
+    margin: 0 40px;
+}
+
+.duration-line::after {
+    content: "→";
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    color: #8c959f;
+    font-size: 14px;
+}
+
+/* Class Boxes */
+.train-classes-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.class-box {
+    background: #fbfbfb;
+    border: 1px solid #d0d7de;
+    border-radius: 6px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.15s;
+    cursor: pointer;
+}
+
+.class-box:hover {
+    border-color: var(--train-primary);
+    background: #ffffff;
+}
+
+.class-box-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.class-code {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--train-dark);
+}
+
+.class-price {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--train-dark);
+}
+
+.class-status {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 6px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.class-status.available {
+    background: var(--train-green-bg);
+    color: var(--train-green);
+}
+
+.class-status.rac {
+    background: var(--train-amber-bg);
+    color: var(--train-amber);
+}
+
+.class-status.wl {
+    background: var(--train-red-bg);
+    color: var(--train-red);
+}
+
+/* ====================================================
+   TRUST / PERKS SECTION
+   ==================================================== */
+
+.train-perks-section {
+    background: #fbfbfb;
+    border-top: 1px solid var(--train-border);
+    padding: 40px 0;
+}
+
+.perks-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.perk-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.perk-item h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 4px;
+    color: var(--train-dark);
+}
+
+.perk-item p {
+    font-size: 13px;
+    color: var(--train-muted);
+    margin: 0;
+    line-height: 1.45;
+}
+
+/* Empty State */
+.empty-results {
+    background: #ffffff;
+    border: 1px solid #e1e4e8;
+    border-radius: 8px;
+    padding: 48px 24px;
+    text-align: center;
+    color: var(--train-muted);
+}
+
+.empty-results h3 {
+    color: var(--train-dark);
+    margin: 0 0 8px;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .search-form-row {
+        flex-wrap: wrap;
+    }
+    .search-cell {
+        min-width: 48%;
+        border-bottom: 1px solid #e1e4e8;
+    }
+    .search-btn-cell {
+        width: 100%;
+    }
+    .minimal-search-btn {
+        width: 100%;
+    }
+    .perks-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .search-cell {
+        min-width: 100%;
+    }
+    .train-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .schedule-station {
+        min-width: 100px;
+    }
+    .perks-grid {
+        grid-template-columns: 1fr;
+    }
+}

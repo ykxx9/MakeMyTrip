@@ -1,0 +1,343 @@
+{% extends 'travel/base.html' %}
+{% load static %}
+
+{% block title %}Train Ticket Booking | MakeMyTrip{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'travel/css/trains.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO & SEARCH SECTION -->
+<section class="train-hero-minimal">
+
+    <div class="train-container">
+
+        <!-- IRCTC BADGE -->
+        <div class="irctc-badge">
+            <span class="irctc-dot"></span>
+            IRCTC Authorized Partner · Instant Confirmation
+        </div>
+
+        <div class="hero-header">
+            <h1>Book Indian Railways train tickets</h1>
+            <p>Check train seat availability, live train running status, and PNR status with zero payment charges on UPI</p>
+        </div>
+
+        <!-- MODE NAVIGATION TABS (PURE PYTHON / URL ROUTED) -->
+        <div class="train-nav-tabs">
+            <a href="{% url 'trains' %}?mode=book" class="train-nav-tab {% if mode == 'book' %}active{% endif %}" style="text-decoration: none;">
+                Book Train Tickets
+            </a>
+            <a href="{% url 'trains' %}?mode=pnr" class="train-nav-tab {% if mode == 'pnr' %}active{% endif %}" style="text-decoration: none;">
+                Check PNR Status
+            </a>
+            <a href="{% url 'trains' %}?mode=live" class="train-nav-tab {% if mode == 'live' %}active{% endif %}" style="text-decoration: none;">
+                Live Train Status
+            </a>
+        </div>
+
+        {% if mode == 'pnr' %}
+        <!-- 2. PNR STATUS PANEL (HANDLED IN PYTHON) -->
+        <div class="pnr-panel" style="display: block;">
+            <h3 style="font-size: 16px; margin: 0 0 10px; color: var(--train-dark);">Check Live PNR Status</h3>
+            <p style="font-size: 13px; color: var(--train-muted); margin: 0 0 14px;">Enter your 10-digit IRCTC PNR number printed on the top-left of your ticket.</p>
+            <form action="{% url 'trains' %}" method="GET" class="pnr-form-row">
+                <input type="hidden" name="mode" value="pnr">
+                <input
+                    type="text"
+                    name="pnr"
+                    class="pnr-input"
+                    placeholder="Enter 10-digit PNR Number (e.g. 2458910243)"
+                    maxlength="10"
+                    value="{{ pnr_query }}"
+                    required
+                >
+                <button type="submit" class="minimal-search-btn">Get PNR Status</button>
+            </form>
+
+            {% if pnr_result %}
+            <div class="pnr-result-box" style="display: block; margin-top: 16px;">
+                <div style="font-weight: 600; color: #008009; margin-bottom: 6px;">✓ PNR Status: {{ pnr_result.status }}</div>
+                <div style="display: flex; gap: 20px; font-size: 13px; color: #333; flex-wrap: wrap;">
+                    <div><strong>PNR:</strong> {{ pnr_result.pnr }}</div>
+                    <div><strong>Train:</strong> {{ pnr_result.train }}</div>
+                    <div><strong>Coach:</strong> {{ pnr_result.coach }}</div>
+                    <div><strong>Berth:</strong> {{ pnr_result.berth }}</div>
+                </div>
+            </div>
+            {% elif pnr_error %}
+            <div class="pnr-result-box" style="display: block; margin-top: 16px; color: #c5221f;">
+                {{ pnr_error }}
+            </div>
+            {% endif %}
+        </div>
+
+        {% elif mode == 'live' %}
+        <!-- 3. LIVE TRAIN STATUS PANEL (HANDLED IN PYTHON) -->
+        <div class="pnr-panel" style="display: block;">
+            <h3 style="font-size: 16px; margin: 0 0 10px; color: var(--train-dark);">Spot Your Train / Live Running Status</h3>
+            <p style="font-size: 13px; color: var(--train-muted); margin: 0 0 14px;">Enter 5-digit train number or train name to see real-time location and delays.</p>
+            <form action="{% url 'trains' %}" method="GET" class="pnr-form-row">
+                <input type="hidden" name="mode" value="live">
+                <input
+                    type="text"
+                    name="train_number"
+                    class="pnr-input"
+                    placeholder="Enter Train Number (e.g. 22436, 12952)"
+                    maxlength="5"
+                    value="{{ train_num_query }}"
+                    required
+                >
+                <button type="submit" class="minimal-search-btn">Check Running Status</button>
+            </form>
+
+            {% if live_result %}
+            <div class="pnr-result-box" style="display: block; margin-top: 16px;">
+                <div style="font-weight: 600; color: #0071c2; margin-bottom: 6px;">● Train #{{ live_result.number }} Live Running Status</div>
+                <div style="font-size: 13px; color: #333; line-height: 1.5;">
+                    <strong>Status:</strong> {{ live_result.status }}<br>
+                    <strong>Last Departed:</strong> {{ live_result.last_departed }}<br>
+                    <strong>Next Halt:</strong> {{ live_result.next_halt }}
+                </div>
+            </div>
+            {% elif live_error %}
+            <div class="pnr-result-box" style="display: block; margin-top: 16px; color: #c5221f;">
+                {{ live_error }}
+            </div>
+            {% endif %}
+        </div>
+
+        {% else %}
+        <!-- 1. SEARCH BOX CONTAINER (BOOKING) -->
+        <div class="minimal-search-box">
+
+            <form action="{% url 'trains' %}" method="GET" class="search-form-row">
+                <input type="hidden" name="mode" value="book">
+
+                <!-- FROM STATION -->
+                <div class="search-cell station-cell">
+                    <label for="train-from">From Station</label>
+                    <input
+                        type="text"
+                        name="from_station"
+                        id="train-from"
+                        placeholder="e.g. New Delhi - NDLS"
+                        value="{{ from_station|default:'New Delhi (NDLS)' }}"
+                        required
+                    >
+                </div>
+
+                <!-- TO STATION -->
+                <div class="search-cell station-cell">
+                    <label for="train-to">To Station</label>
+                    <input
+                        type="text"
+                        name="to_station"
+                        id="train-to"
+                        placeholder="e.g. Varanasi - BSB"
+                        value="{{ to_station|default:'Varanasi Jn (BSB)' }}"
+                        required
+                    >
+                </div>
+
+                <!-- TRAVEL DATE -->
+                <div class="search-cell">
+                    <label for="train-date">Travel Date</label>
+                    <input
+                        type="date"
+                        name="date"
+                        id="train-date"
+                        min="{{ today }}"
+                        value="{{ travel_date|default:today }}"
+                        required
+                    >
+                </div>
+
+                <!-- CLASS -->
+                <div class="search-cell">
+                    <label for="train-class">Class</label>
+                    <select name="train_class" id="train-class">
+                        <option value="" {% if not train_class %}selected{% endif %}>All Classes</option>
+                        <option value="SL" {% if train_class == 'SL' %}selected{% endif %}>Sleeper (SL)</option>
+                        <option value="3A" {% if train_class == '3A' %}selected{% endif %}>AC 3 Tier (3A)</option>
+                        <option value="2A" {% if train_class == '2A' %}selected{% endif %}>AC 2 Tier (2A)</option>
+                        <option value="1A" {% if train_class == '1A' %}selected{% endif %}>AC 1st Class (1A)</option>
+                        <option value="CC" {% if train_class == 'CC' %}selected{% endif %}>AC Chair Car (CC)</option>
+                    </select>
+                </div>
+
+                <!-- QUOTA -->
+                <div class="search-cell">
+                    <label for="train-quota">Quota</label>
+                    <select name="quota" id="train-quota">
+                        <option value="GN" selected>General</option>
+                        <option value="TQ">Tatkal</option>
+                        <option value="LD">Ladies</option>
+                        <option value="SS">Senior Citizen</option>
+                    </select>
+                </div>
+
+                <!-- SUBMIT BUTTON -->
+                <div class="search-btn-cell">
+                    <button type="submit" class="minimal-search-btn">
+                        Search Trains
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+        {% endif %}
+
+        <!-- POPULAR ROUTES PILLS -->
+        <div class="popular-tags">
+            <span class="tags-label">Popular Routes:</span>
+            <a href="{% url 'trains' %}?from_station=New+Delhi+(NDLS)&to_station=Varanasi+Jn+(BSB)" class="tag-link">Delhi → Varanasi</a>
+            <a href="{% url 'trains' %}?from_station=Mumbai+CSMT&to_station=Madgaon+Goa+(MAO)" class="tag-link">Mumbai → Goa</a>
+            <a href="{% url 'trains' %}?from_station=New+Delhi+(NDLS)&to_station=Mumbai+Central+(MMCT)" class="tag-link">Delhi → Mumbai</a>
+            <a href="{% url 'trains' %}?from_station=New+Delhi+(NDLS)&to_station=Lucknow+(LKO)" class="tag-link">Delhi → Lucknow</a>
+            <a href="{% url 'trains' %}?from_station=Bengaluru+(SBC)&to_station=Chennai+Central+(MAS)" class="tag-link">Bengaluru → Chennai</a>
+            {% if request.GET.from_station %}
+            <a href="{% url 'trains' %}" class="tag-link" style="color: #666;">Reset Search ×</a>
+            {% endif %}
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- TRAIN LISTINGS SECTION -->
+<section class="trains-section">
+
+    <div class="train-container">
+
+        <div class="trains-top-row">
+            <div>
+                <h2>Trains from {{ from_station|default:'New Delhi' }} to {{ to_station|default:'Varanasi' }}</h2>
+                <p>Showing live availability for departure on {{ travel_date|default:today }}</p>
+            </div>
+            <div>
+                <span style="font-size: 13px; color: var(--train-muted); font-weight: 500;">
+                    {{ trains|length }} Trains Available
+                </span>
+            </div>
+        </div>
+
+        <!-- TRAIN LIST -->
+        {% if trains %}
+        <div class="trains-list">
+
+            {% for tr in trains %}
+            <div class="train-card">
+
+                <!-- HEADER: NAME, NUMBER, RUNNING DAYS -->
+                <div class="train-card-header">
+
+                    <div class="train-identity">
+                        <h3 class="train-name">{{ tr.name }}</h3>
+                        <span class="train-number">#{{ tr.number }}</span>
+                    </div>
+
+                    <div class="train-runs-days">
+                        <span>Runs on:</span>
+                        {% for day in tr.running_days %}
+                        <span class="day-badge {% if day.active %}active{% endif %}" title="{{ day.name }}">{{ day.code }}</span>
+                        {% endfor %}
+                    </div>
+
+                </div>
+
+                <!-- SCHEDULE ROW -->
+                <div class="train-schedule-row">
+
+                    <!-- DEPARTURE -->
+                    <div class="schedule-station">
+                        <div class="time-val">{{ tr.departure_time }}</div>
+                        <div class="station-name">{{ tr.from_station }}</div>
+                    </div>
+
+                    <!-- DURATION -->
+                    <div class="journey-duration">
+                        <div class="duration-val">{{ tr.duration }}</div>
+                        <div class="duration-line"></div>
+                    </div>
+
+                    <!-- ARRIVAL -->
+                    <div class="schedule-station dest">
+                        <div class="time-val">{{ tr.arrival_time }}</div>
+                        <div class="station-name">{{ tr.to_station }}</div>
+                    </div>
+
+                </div>
+
+                <!-- CLASS AVAILABILITY BOXES -->
+                <div class="train-classes-row">
+                    {% for cls in tr.classes %}
+                    <div class="class-box">
+                        <div class="class-box-top">
+                            <span class="class-code">{{ cls.code }}</span>
+                            <span class="class-price">{{ cls.price }}</span>
+                        </div>
+                        <div class="class-status {{ cls.status_type }}">
+                            {{ cls.status }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+            {% endfor %}
+
+        </div>
+        {% else %}
+        <div class="empty-results">
+            <h3>No direct trains found</h3>
+            <p>No direct trains running on this route or date. Try searching popular routes like Delhi to Varanasi or Delhi to Mumbai.</p>
+            <a href="{% url 'trains' %}" class="minimal-search-btn" style="display: inline-block; line-height: 48px; text-decoration: none; margin-top: 14px;">
+                Reset Train Search
+            </a>
+        </div>
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+<!-- TRUST & IRCTC PERKS SECTION -->
+<section class="train-perks-section">
+
+    <div class="train-container">
+
+        <div class="perks-grid">
+
+            <div class="perk-item">
+                <h4>Official IRCTC Partner</h4>
+                <p>Authorized booking agent with direct Indian Railways reservation access.</p>
+            </div>
+
+            <div class="perk-item">
+                <h4>₹0 Gateway Fees on UPI</h4>
+                <p>Save convenience and payment charges when you pay with any UPI app.</p>
+            </div>
+
+            <div class="perk-item">
+                <h4>Instant Refund to Bank</h4>
+                <p>Get immediate automated refunds credited directly to your source account on cancellation.</p>
+            </div>
+
+            <div class="perk-item">
+                <h4>Live PNR &amp; Trip Updates</h4>
+                <p>Free WhatsApp &amp; SMS alerts on coach position, platform numbers, and delays.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

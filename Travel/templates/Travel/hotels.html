@@ -1,0 +1,137 @@
+{% extends 'travel/base.html' %}
+{% load static %}
+
+{% block title %}Hotels | MakeMyTrip{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'travel/css/hotels.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<!-- MINIMAL SEARCH SECTION -->
+<section class="hotel-hero-minimal">
+
+    <div class="hotel-container">
+
+        <div class="hero-header">
+            <h1>Find your next stay</h1>
+            <p>Search low prices on hotels, homes, and unique stays</p>
+        </div>
+
+        <!-- SEARCH BOX -->
+        <div class="minimal-search-box">
+
+            <form action="{% url 'hotel_results' %}" method="GET" class="search-form-row">
+
+                <!-- DESTINATION -->
+                <div class="search-cell">
+                    <label for="hotel-city-input">Destination</label>
+                    <input
+                        type="text"
+                        name="city"
+                        id="hotel-city-input"
+                        placeholder="Where are you going?"
+                        value="Goa"
+                        required
+                    >
+                </div>
+
+                <!-- CHECK-IN -->
+                <div class="search-cell">
+                    <label for="hotel-checkin">Check-in</label>
+                    <input
+                        type="date"
+                        name="checkin"
+                        id="hotel-checkin"
+                        min="{{ today }}"
+                        value="{{ today }}"
+                        required
+                    >
+                </div>
+
+                <!-- CHECK-OUT -->
+                <div class="search-cell">
+                    <label for="hotel-checkout">Check-out</label>
+                    <input
+                        type="date"
+                        name="checkout"
+                        id="hotel-checkout"
+                        min="{{ tomorrow }}"
+                        value="{{ tomorrow }}"
+                        required
+                    >
+                </div>
+
+                <!-- GUESTS & ROOMS -->
+                <div class="search-cell">
+                    <label for="hotel-guests">Guests &amp; Rooms</label>
+                    <select name="guests" id="hotel-guests">
+                        <option value="1">1 Adult · 1 Room</option>
+                        <option value="2" selected>2 Adults · 1 Room</option>
+                        <option value="3">3 Adults · 1 Room</option>
+                        <option value="4">4 Adults · 2 Rooms</option>
+                    </select>
+                </div>
+
+                <!-- SUBMIT BUTTON -->
+                <div class="search-btn-cell">
+                    <button type="submit" class="minimal-search-btn">
+                        Search
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+
+        <!-- POPULAR DESTINATION PILLS -->
+        <div class="popular-tags">
+            <span class="tags-label">Popular:</span>
+            <a href="{% url 'hotel_results' %}?city=Goa" class="tag-link">Goa</a>
+            <a href="{% url 'hotel_results' %}?city=Mumbai" class="tag-link">Mumbai</a>
+            <a href="{% url 'hotel_results' %}?city=Delhi" class="tag-link">Delhi</a>
+            <a href="{% url 'hotel_results' %}?city=Manali" class="tag-link">Manali</a>
+            <a href="{% url 'hotel_results' %}?city=Jaipur" class="tag-link">Jaipur</a>
+            <a href="{% url 'hotel_results' %}?city=Kerala" class="tag-link">Kerala</a>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- POPULAR DESTINATIONS GRID -->
+<section class="minimal-destinations-section">
+
+    <div class="hotel-container">
+
+        <div class="section-top-row">
+            <div>
+                <h2>Popular destinations</h2>
+                <p>Trending choices for travellers from India</p>
+            </div>
+            <a href="{% url 'hotel_results' %}?city=Goa" class="minimal-text-link">View all stays →</a>
+        </div>
+
+        <div class="minimal-cards-grid">
+
+            {% for dest in trending_destinations %}
+            <a href="{% url 'hotel_results' %}?city={{ dest.name }}" class="minimal-dest-card">
+                <div class="dest-thumb">
+                    <img src="{% static dest.image %}" alt="{{ dest.name }}">
+                </div>
+                <div class="dest-meta">
+                    <h3>{{ dest.name }}</h3>
+                    <p>{{ dest.properties }}</p>
+                </div>
+            </a>
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
